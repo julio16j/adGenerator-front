@@ -12,10 +12,10 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          iClean Admin
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>Powered by Ifpb Students</div>
       </q-toolbar>
     </q-header>
 
@@ -30,12 +30,16 @@
           header
           class="text-grey-8"
         >
-          Essential Links
+          Menu
         </q-item-label>
         <EssentialLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
+        />
+        <EssentialLink
+          v-bind="signoutLink"
+          @clickLink="logout"
         />
       </q-list>
     </q-drawer>
@@ -49,48 +53,12 @@
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
 
-const linksData = [
+const menuItens = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    title: 'Home',
+    caption: 'Página Principal',
+    icon: 'home',
+    link: 'home'
   }
 ]
 
@@ -100,7 +68,18 @@ export default {
   data () {
     return {
       leftDrawerOpen: false,
-      essentialLinks: linksData
+      essentialLinks: menuItens,
+      signoutLink: {
+        title: 'Sair',
+        caption: '',
+        icon: 'fas fa-sign-out-alt'
+      }
+    }
+  },
+  methods: {
+    logout () {
+      localStorage.setItem('logado', null)
+      this.$router.push({ name: 'home' })
     }
   }
 }

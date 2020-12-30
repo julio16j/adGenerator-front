@@ -3,13 +3,17 @@
     <q-card style="width: 500px">
       <q-card-section>
         <div class="row justify-center q-mb-md text-h4 colorPrimary">
-          Entrar
+          Cadastrar-se
         </div>
         <div class="row justify-center text-subtitle1 colorPrimary">
-          Informe seus dados de acesso
+          Informe seus dados de cadastro
         </div>
-        <q-form @submit="login" style="display: flex; justify-content: center" >
+        <q-form @submit="cadastrar" style="display: flex; justify-content: center" >
           <div style="width: 80%">
+            <div>
+              <q-input label="Nome" v-model="form.nome"
+                :rules="[ val => val && val.length > 0 || '']" />
+            </div>
             <div>
               <q-input label="Email" v-model="form.email"
                 :rules="[ val => val && val.length > 0 || '']" />
@@ -20,7 +24,7 @@
             </div>
             <div class="q-mt-md row justify-between">
               <div class="col colorPrimary">
-                <q-btn @click="navigateToCadastrar" label="Cadastre-se" flat round />
+                <q-btn @click="navigateToLogin" label="Já Possui Conta ?" flat round />
               </div>
               <div class="col colorPrimary flex justify-end">
                 <q-btn type="submit" label="Confirmar" />
@@ -37,31 +41,28 @@
 import userService from '../services/userService'
 import notificacaoMixin from '../mixins/notificacaoMixin'
 export default {
-  name: 'PageIndex',
+  name: 'Cadastra',
   mixins: [notificacaoMixin],
-  mounted () {
-    if (localStorage.getItem('logado') === 'logado') {
-      this.navigateToDashBoard()
-    }
-  },
   data () {
     return {
       form: {
+        nome: null,
         email: null,
-        senha: null
+        senha: null,
+        isAdmin: true
       }
     }
   },
   methods: {
-    navigateToCadastrar () {
-      this.$router.push({ name: 'cadastrar' })
+    navigateToLogin () {
+      this.$router.push({ name: 'home' })
     },
     navigateToDashBoard () {
       this.$router.push({ name: 'dashboard' })
     },
-    async login () {
+    async cadastrar () {
       try {
-        const response = await userService.login(this.form)
+        const response = await userService.cadastrar(this.form)
         if (response.data && this.isAdmin(response.data)) {
           localStorage.setItem('logado', 'logado')
           localStorage.setItem('usuarioId', response.data.id)

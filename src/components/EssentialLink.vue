@@ -1,19 +1,17 @@
 <template>
   <q-item
     clickable
-    tag="a"
-    target="_blank"
-    :href="link"
+    @click="navigateToLink"
   >
     <q-item-section
       v-if="icon"
       avatar
     >
-      <q-icon :name="icon" />
+      <q-icon :name="icon" color="primary" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
+      <q-item-label class="colorPrimary">{{ title }}</q-item-label>
       <q-item-label caption>
         {{ caption }}
       </q-item-label>
@@ -43,6 +41,12 @@ export default {
     icon: {
       type: String,
       default: ''
+    }
+  },
+  methods: {
+    navigateToLink () {
+      this.$router.push({ name: this.link })
+      this.$emit('clickLink')
     }
   }
 }
