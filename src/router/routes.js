@@ -1,7 +1,6 @@
 import Home from '../pages/Index'
 import Cadastra from '../pages/Cadastra'
 import Dashboard from '../pages/Dashboard'
-import CadastraLimpeza from '../pages/CadastraLimpeza'
 const routes = [
   {
     path: '/',
@@ -9,8 +8,7 @@ const routes = [
     children: [
       { path: '', component: Home, name: 'home' },
       { path: 'cadastrar', component: Cadastra, name: 'cadastrar' },
-      { path: 'dashboard', component: Dashboard, name: 'dashboard' },
-      { path: 'novaLimpeza', component: CadastraLimpeza, name: 'cadastrarLimpeza' }
+      { path: 'dashboard', component: Dashboard, name: 'dashboard' }
     ]
   },
 

@@ -12,10 +12,8 @@
         />
 
         <q-toolbar-title>
-          iClean Admin
+          Ad Generator
         </q-toolbar-title>
-
-        <div>Powered by Ifpb Students</div>
       </q-toolbar>
     </q-header>
 
