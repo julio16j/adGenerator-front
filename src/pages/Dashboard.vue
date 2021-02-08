@@ -1,6 +1,13 @@
 <template>
-  <q-card>
-    Tem nada aqui
+  <q-card >
+    <q-section class="row justify-between q-pa-md">
+      <div class="text-h5 colorPrimary" >
+        Olá {{usuario.nome}}
+      </div>
+      <div>
+        <q-btn icon="fa fa-plus" label="Adicionar Modelo" color="primary" :to="{ name: 'criarModelo' }" />
+      </div>
+    </q-section>
   </q-card>
 </template>
 <script>
