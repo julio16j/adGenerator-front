@@ -38,8 +38,8 @@
 </template>
 
 <script>
-import userService from '../services/userService'
-import notificacaoMixin from '../mixins/notificacaoMixin'
+import userService from '@/services/userService'
+import notificacaoMixin from '@/mixins/notificacaoMixin'
 export default {
   name: 'Cadastra',
   mixins: [notificacaoMixin],
@@ -69,7 +69,7 @@ export default {
           this.navigateToDashBoard()
         }
       } catch (error) {
-        this.notificacaoErro(error.data + '')
+        this.notificacaoErro(error.message)
       }
     },
     isAdmin (usuario) {

@@ -1,7 +1,8 @@
-import Home from '../pages/Index'
-import Cadastra from '../pages/Cadastra'
-import Dashboard from '../pages/Dashboard'
-import CriarModelo from '../pages/Modelo/CriarModelo'
+import Home from '@/pages/Index'
+import Cadastra from '@/pages/Cadastra'
+import Dashboard from '@/pages/Dashboard'
+import CriarModelo from '@/pages/Modelo/CriarModelo'
+import DescricaoCadastro from '@/pages/DadosBasicos/Descricao/Cadastro'
 import Router from '../layouts/Router'
 const routes = [
   {
@@ -16,6 +17,13 @@ const routes = [
         component: Router,
         children: [
           { path: 'adicionar', component: CriarModelo, name: 'criarModelo' }
+        ]
+      },
+      {
+        path: 'Descricao',
+        component: Router,
+        children: [
+          { path: 'cadastro', component: DescricaoCadastro, name: 'descricaoCadastro' }
         ]
       }
     ]

@@ -38,7 +38,9 @@ export default {
         const response = await userService.getById(id)
         if (response.data) this.usuario = response.data
       } catch (error) {
-        this.notificacaoErro(error)
+        localStorage.setItem('logado', 'nao')
+        this.$router.push({ name: 'home' })
+        this.notificacaoErro(error.message || 'Erro ao logar')
       }
     },
     formatarData (data) {

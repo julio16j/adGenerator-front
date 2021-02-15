@@ -8,7 +8,7 @@
           </div>
           <div class="q-ml-md q-gutter-x-md">
             <q-btn label="Voltar" @click="voltar" color="dark" />
-            <q-btn label="Salvar" @click="salvar" icon="check" color="green" />
+            <q-btn label="Salvar" @click="abrirDialog" icon="check" color="green" />
           </div>
         </div>
         <div @click.self="desligaFoco" class="row justify-center">
@@ -33,34 +33,71 @@
           </div>
       </div>
     </div>
+    <q-dialog v-model="abreNomeDialog" >
+      <q-card >
+        <q-card-section class="colorPrimary text-h6">
+          Insira um Nome para o Modelo
+        </q-card-section>
+        <q-card-section>
+          <div>
+            <q-input label="Nome" v-model="modelo.nome" />
+          </div>
+        </q-card-section>
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn flat label="Cancelar" v-close-popup />
+          <q-btn flat label="Salvar" @click="salvar" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 <script>
-import MoveableElement from '../../components/MoveableElement'
+import MoveableElement from 'components/MoveableElement'
+import TipoElemento from '@/classes/enums/TipoElemento'
+import Mensagens from '@/classes/enums/Mensagens'
+import ModeloService from '@/services/modeloService.js'
+import notificacaoMixin from '@/mixins/notificacaoMixin'
 export default {
   name: 'CriarModelo',
+  mixins: [notificacaoMixin],
   components: {
     MoveableElement
   },
   data: () => ({
-    elements: []
+    elements: [],
+    modelo: {
+      nome: '',
+      descricoes: [],
+      cartoes: []
+    },
+    abreNomeDialog: false
   }),
   methods: {
+    temElementosByTipo (tipo) {
+      const listaElementosByTipo = this.elements.filter((element, index) => {
+        if (element.tipo === tipo) {
+          this.elements[index].foco = true
+          return element.tipo === tipo
+        }
+      })
+      return listaElementosByTipo.length > 0
+    },
     addTitle () {
-      this.elements.push(
-        {
+      if (!this.temElementosByTipo(TipoElemento.Titulo)) {
+        this.elements.push({
           id: this.elements.length,
-          tipo: 'titulo',
+          tipo: TipoElemento.Titulo,
           value: 'Titulo',
           style: 'position: absolute; right: 200px',
           foco: true,
           transform: {}
         })
+      }
     },
     addDescricao () {
       this.elements.push({
         id: this.elements.length,
-        tipo: 'descricao',
+        tipo: TipoElemento.Descricao,
         style: 'position: absolute; bottom: 200px',
         value: 'Descrição',
         foco: true,
@@ -70,7 +107,7 @@ export default {
     addCartao () {
       this.elements.push({
         id: this.elements.length,
-        tipo: 'cartao',
+        tipo: TipoElemento.cartao,
         style: 'position: absolute; top: 0; right: 300px',
         value: 'Cartão',
         foco: true,
@@ -78,16 +115,10 @@ export default {
       })
     },
     addImage () {
-      const listaElementosTipoImagem = this.elements.filter((element, index) => {
-        if (element.tipo === 'imagem') {
-          this.elements[index].foco = true
-          return element.tipo === 'imagem'
-        }
-      })
-      if (listaElementosTipoImagem.length === 0) {
+      if (!this.temElementosByTipo(TipoElemento.Imagem)) {
         this.elements.push({
           id: this.elements.length,
-          tipo: 'imagem',
+          tipo: TipoElemento.Imagem,
           style: 'position: absolute; top: 0',
           foco: true,
           transform: {}
@@ -107,7 +138,6 @@ export default {
       this.elements = this.elements.map(ele => {
         if (ele.id === id) {
           ele.transform[tipo] = transform
-          console.log(ele.transform)
         }
         return ele
       })
@@ -115,7 +145,61 @@ export default {
     voltar () {
       this.$router.back()
     },
-    salvar () {}
+    abrirDialog () {
+      this.abreNomeDialog = true
+    },
+    salvar () {
+      const modeloMontado = this.montarModelo()
+      ModeloService.cadastrar(modeloMontado)
+        .then(response => {
+          if (response.status === 200) {
+            this.notificacaoSucesso(Mensagens.OperacaoExecutada)
+            this.$router.back()
+          }
+        }).catch(error => {
+          this.notificacaoErro(error.data + '')
+        })
+      this.abreNomeDialog = false
+    },
+    montarModelo () {
+      const modelo = { ...this.modelo }
+      this.elements.map(ele => {
+        if (ele.tipo === TipoElemento.Imagem) {
+          modelo.imagem = {
+            elementoImagem: {
+              value: 'imagem',
+              estiloInicial: ele.style
+            },
+            transformacao: ele.transform
+          }
+        } else if (ele.tipo === TipoElemento.Titulo) {
+          modelo.titulo = {
+            elementoTitulo: {
+              value: ele.value,
+              estiloInicial: ele.style
+            },
+            transformacao: ele.transform
+          }
+        } else if (ele.tipo === TipoElemento.Descricao) {
+          modelo.descricoes.push({
+            elementoDescricao: {
+              value: ele.value,
+              estiloInicial: ele.style
+            },
+            transformacao: ele.transform
+          })
+        } else {
+          modelo.cartoes.push({
+            elementoCartao: {
+              value: ele.value,
+              estiloInicial: ele.style
+            },
+            transformacao: ele.transform
+          })
+        }
+      })
+      return modelo
+    }
   }
 }
 </script>

@@ -35,6 +35,18 @@
           :key="link.title"
           v-bind="link"
         />
+        <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fa fa-exchange-alt" label="Cadastros Básicos" caption="">
+          <div class="itemMenu">
+            <q-item clickable tag="a" v-ripple :to="{name: 'descricaoCadastro'}">
+              <q-item-section avatar>
+                <q-icon fa fa-dollar-sign name="fa fa-list" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Descrição</q-item-label>
+              </q-item-section>
+            </q-item>
+          </div>
+        </q-expansion-item>
         <EssentialLink
           v-bind="signoutLink"
           @clickLink="logout"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="element.tipo==='imagem'"  >
+    <div v-if="element.tipo===TipoElemento.Imagem"  >
       <Moveable
         class="moveable"
         v-bind="moveable"
@@ -18,7 +18,7 @@
         </div>
       </Moveable>
     </div>
-    <div v-else-if="element.tipo === 'descricao' || element.tipo === 'titulo'" >
+    <div v-else-if="element.tipo === TipoElemento.Descricao || element.tipo === TipoElemento.Titulo" >
       <Moveable
         class="moveable"
         v-bind="moveable"
@@ -58,6 +58,7 @@
 </template>
 <script>
 import Moveable from 'vue-moveable'
+import TipoElemento from '@/classes/enums/TipoElemento'
 export default {
   props: ['element', 'foco'],
   components: {
@@ -83,7 +84,8 @@ export default {
       rotatable: true,
       throttleRotate: 0.2,
       origin: false
-    }
+    },
+    TipoElemento
   }),
   methods: {
     handleDrag ({ target, transform }) {

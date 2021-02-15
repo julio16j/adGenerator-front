@@ -68,7 +68,7 @@ export default {
           this.navigateToDashBoard()
         }
       } catch (error) {
-        this.notificacaoErro(error.data + '')
+        this.notificacaoErro(error.message)
       }
     },
     isAdmin (usuario) {
