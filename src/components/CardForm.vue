@@ -76,6 +76,7 @@ export default {
     onSubmit () {
       const formData = this.montarForm()
       this.submitButton.submit(formData)
+      this.$emit('xablau', { xablau: 'xablau' })
     },
     montarForm () {
       const form = {}

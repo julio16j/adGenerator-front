@@ -3,6 +3,7 @@ import Cadastra from '@/pages/Cadastra'
 import Dashboard from '@/pages/Dashboard'
 import CriarModelo from '@/pages/Modelo/CriarModelo'
 import DescricaoCadastro from '@/pages/DadosBasicos/Descricao/Cadastro'
+import DescricaoListar from '@/pages/DadosBasicos/Descricao/Listar'
 import Router from '../layouts/Router'
 const routes = [
   {
@@ -23,7 +24,8 @@ const routes = [
         path: 'Descricao',
         component: Router,
         children: [
-          { path: 'cadastro', component: DescricaoCadastro, name: 'descricaoCadastro' }
+          { path: 'cadastro', component: DescricaoCadastro, name: 'descricaoCadastro' },
+          { path: 'listar', component: DescricaoListar, name: 'descricaoListar' }
         ]
       }
     ]

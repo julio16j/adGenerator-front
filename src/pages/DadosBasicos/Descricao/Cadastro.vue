@@ -45,6 +45,9 @@ export default {
         }).catch(error => {
           this.notificacaoErro(error.message)
         })
+    },
+    imprimeXablau (xablau) {
+      console.log(xablau)
     }
   }
 }

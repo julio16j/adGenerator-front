@@ -37,7 +37,7 @@
         />
         <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fa fa-exchange-alt" label="Cadastros Básicos" caption="">
           <div class="itemMenu">
-            <q-item clickable tag="a" v-ripple :to="{name: 'descricaoCadastro'}">
+            <q-item clickable tag="a" v-ripple :to="{name: 'descricaoListar'}">
               <q-item-section avatar>
                 <q-icon fa fa-dollar-sign name="fa fa-list" />
               </q-item-section>
