@@ -5,8 +5,9 @@
         <div :class="tituloStyle">
           {{ titulo }}
         </div>
-        <div class="col-auto">
-          <q-btn color="primary" no-caps icon="fas fa-plus" label="Cadastrar"></q-btn>
+        <div v-if="cadastrarBtn.mostraBotao" class="col-auto">
+          <q-btn color="primary" no-caps icon="fas fa-plus" @click="cadastrarBtn.cadastrar"
+            :label=" cadastrarBtn.label || 'Cadastrar'" />
         </div>
       </q-card-section>
       <q-card-section>
@@ -94,6 +95,14 @@ export default {
       default: () => {
         return {
           editar: () => {}
+        }
+      }
+    },
+    cadastrarBtn: {
+      type: Object,
+      default: () => {
+        return {
+          cadastrar: () => {}
         }
       }
     }

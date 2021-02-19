@@ -7,7 +7,7 @@
     <ListagemComFiltro titulo="Descrições" :inputs="inputs"
       :cancelButton="cancelButton" :submitButton="submitButton"
       :tableColumns="tableColumns" :dataList="listaDescricao"
-      :editarBtn="editarBtn" :excluirBtn="excluirBtn"
+      :editarBtn="editarBtn" :excluirBtn="excluirBtn" :cadastrarBtn="cadastrarBtn"
     />
   </div>
 </template>
@@ -43,7 +43,11 @@ export default {
       },
       listaDescricao: [],
       editarBtn: { mostraBotao: true, editar: () => {} },
-      excluirBtn: { mostraBotao: true, excluir: () => {} }
+      excluirBtn: { mostraBotao: true, excluir: () => {} },
+      cadastrarBtn: {
+        mostraBotao: true,
+        cadastrar: () => { this.$router.push({ name: 'descricaoCadastro' }) }
+      }
     }
   },
   methods: {
