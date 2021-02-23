@@ -33,6 +33,11 @@ const routes = [
             component: DescricaoCadastro,
             name: 'descricaoEditar',
             props: { contexto: 'editar' }
+          },
+          {
+            path: 'excluir/:descricaoId',
+            component: DescricaoListar,
+            name: 'descricaoExcluir'
           }
         ]
       }

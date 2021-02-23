@@ -6,7 +6,7 @@ const URL = {
   cadastrar: () => `${URL.base}`,
   editar: () => `${URL.base}/`,
   getById: (id) => `${URL.base}/${id}`,
-  deleteById: () => `${URL.base}/`,
+  deleteById: (id) => `${URL.base}/${id}`,
   pesquisar: () => `${URL.base}/filtrar`
 }
 export default {
@@ -23,7 +23,7 @@ export default {
     return api.get(URL.getById(descricaoValorId))
   },
   deleteById (descricaoValorId) {
-    return api.delete(URL.deleteById(), { descricaoValorId })
+    return api.delete(URL.deleteById(descricaoValorId))
   },
   pesquisar (filtro) {
     return api.get(URL.pesquisar(), {

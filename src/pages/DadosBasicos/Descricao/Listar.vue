@@ -21,6 +21,9 @@ export default {
   components: {
     ListagemComFiltro
   },
+  props: {
+    contexto: { type: String, default: 'listar' }
+  },
   mixins: [NotificacaoMixin],
   data () {
     return {
@@ -51,7 +54,12 @@ export default {
           })
         }
       },
-      excluirBtn: { mostraBotao: true, excluir: () => {} },
+      excluirBtn: {
+        mostraBotao: true,
+        excluir: (linha) => {
+          this.excluirDescricao(linha.descricao)
+        }
+      },
       cadastrarBtn: {
         mostraBotao: true,
         cadastrar: () => { this.$router.push({ name: 'descricaoCadastro' }) }
@@ -71,6 +79,10 @@ export default {
         }).catch(error => {
           this.notificacaoErro(error.message)
         })
+    },
+    excluirDescricao (descricaoId) {
+      DescricaoService.deleteById(descricaoId)
+        .then(this.listarDescricao)
     }
   }
 }
