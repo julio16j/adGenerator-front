@@ -15,11 +15,19 @@ export default {
   components: {
     CardForm
   },
+  props: {
+    contexto: { type: String, default: 'cadastro' }
+  },
   mixins: [NotificacaoMixin],
+  created () {
+    if (this.contexto === 'editar') {
+      this.getDescricao(this.$route.params.descricaoId)
+    }
+  },
   data () {
     return {
       inputs: [
-        { label: 'Descrição', value: null, nome: 'descricao' },
+        { label: 'Descrição', value: null, nome: 'descricao', readonly: this.contexto === 'editar' },
         { label: 'Categoria', value: null, nome: 'categoria', options: CategoriaOptions, type: 'select' },
         { label: 'Tamanho', value: null, nome: 'tamanho', options: TamanhoOptions, type: 'select' }
       ],
@@ -35,16 +43,38 @@ export default {
     voltar () {
       this.$router.back()
     },
-    salvarDescricao (descricao) {
-      DescricaoService.cadastrar(descricao)
+    getDescricao (descricaoValorId) {
+      DescricaoService.getById(descricaoValorId)
         .then(response => {
           if (response.status === 200) {
-            this.notificacaoSucesso(Mensagems.OperacaoExecutada)
-            this.$router.back()
+            this.inputs[0].value = response.data.descricao
+            this.inputs[1].value = response.data.categoria
+            this.inputs[2].value = response.data.tamanho
           }
-        }).catch(error => {
-          this.notificacaoErro(error.message)
         })
+    },
+    salvarDescricao (descricao) {
+      if (this.contexto === 'cadastro') {
+        DescricaoService.cadastrar(descricao)
+          .then(response => {
+            if (response.status === 200) {
+              this.notificacaoSucesso(Mensagems.OperacaoExecutada)
+              this.$router.back()
+            }
+          }).catch(error => {
+            this.notificacaoErro(error.message)
+          })
+      } else {
+        DescricaoService.editar(descricao)
+          .then(response => {
+            if (response.status === 200) {
+              this.notificacaoSucesso(Mensagems.OperacaoExecutada)
+              this.$router.back()
+            }
+          }).catch(error => {
+            this.notificacaoErro(error.message)
+          })
+      }
     },
     imprimeXablau (xablau) {
       console.log(xablau)

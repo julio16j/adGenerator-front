@@ -42,7 +42,15 @@ export default {
         submit: this.listarDescricao
       },
       listaDescricao: [],
-      editarBtn: { mostraBotao: true, editar: () => {} },
+      editarBtn: {
+        mostraBotao: true,
+        editar: (linha) => {
+          this.$router.push({
+            name: 'descricaoEditar',
+            params: { descricaoId: linha.descricao }
+          })
+        }
+      },
       excluirBtn: { mostraBotao: true, excluir: () => {} },
       cadastrarBtn: {
         mostraBotao: true,

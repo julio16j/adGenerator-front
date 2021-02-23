@@ -4,6 +4,7 @@ const URL = {
   base: 'descricaoValor',
   listar: () => `${URL.base}/`,
   cadastrar: () => `${URL.base}`,
+  editar: () => `${URL.base}/`,
   getById: (id) => `${URL.base}/${id}`,
   deleteById: () => `${URL.base}/`,
   pesquisar: () => `${URL.base}/filtrar`
@@ -14,6 +15,9 @@ export default {
   },
   cadastrar (descricaoValor) {
     return api.post(URL.cadastrar(), descricaoValor)
+  },
+  editar (descricaoValor) {
+    return api.put(URL.editar(), descricaoValor)
   },
   getById (descricaoValorId) {
     return api.get(URL.getById(descricaoValorId))

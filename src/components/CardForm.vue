@@ -13,7 +13,8 @@
             <div class="col" v-for="input in inputs" :key="input.nome">
               <q-input v-if="input.type !== 'select'" :type="input.type || 'text'"
                 :label="input.label" v-model="input.value" :clearable="true && !input.clearable"
-                :rules="input.rules || [ val => val && val.length > 0 || '']" />
+                :rules="input.rules || [ val => val && val.length > 0 || '']"
+                :readonly="input.readonly || false" />
               <q-select v-else :label="input.label" v-model="input.value"
                 emit-value map-options :options="input.options || []" :clearable="true && !input.clearable"
                 :rules="input.rules || [ val => val && !!val || '']" />
