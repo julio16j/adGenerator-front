@@ -1,5 +1,5 @@
 <template>
-  <div class="q-mx-md q-gutter-md" >
+  <div class="q-mx-md" >
     <q-card :style="cardStyle" :class="cardClass">
       <q-card-section class="row justify-between">
         <div :class="tituloStyle">
@@ -10,7 +10,7 @@
             :label=" cadastrarBtn.label || 'Cadastrar'" />
         </div>
       </q-card-section>
-      <q-card-section>
+      <q-card-section class="q-gutter-md">
         <simple-form :inputs="inputs" :submitButton="submitButton" />
       </q-card-section>
     </q-card>
@@ -20,6 +20,12 @@
         <template v-slot:body-cell-acoes="props">
           <q-td :props="props">
             <div class="q-ml-sm q-mr-sm paddingBtns">
+              <q-btn v-if="detalharBtn.mostraBotao" :size="size" flat round
+                icon="fa fa-eye" color="green-6" @click="() => detalharBtn.detalhar(props.row)" >
+                <q-tooltip anchor="top middle" self="center middle">
+                  {{ detalharBtn.label || 'Detalhar' }}
+                </q-tooltip>
+              </q-btn>
               <q-btn v-if="editarBtn.mostraBotao" :size="size" flat round
                 icon="fa fa-pencil-alt" color="grey-8" @click="() => editarBtn.editar(props.row)" >
                 <q-tooltip anchor="top middle" self="center middle">
@@ -95,6 +101,14 @@ export default {
       default: () => {
         return {
           editar: () => {}
+        }
+      }
+    },
+    detalharBtn: {
+      type: Object,
+      default: () => {
+        return {
+          detalhar: () => {}
         }
       }
     },
