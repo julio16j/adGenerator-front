@@ -4,6 +4,8 @@ import Dashboard from '@/pages/Dashboard'
 import CriarModelo from '@/pages/Modelo/CriarModelo'
 import DescricaoCadastro from '@/pages/DadosBasicos/Descricao/Cadastro'
 import DescricaoListar from '@/pages/DadosBasicos/Descricao/Listar'
+import CartaoListar from '@/pages/Cartao/Listar'
+import CartaoCadastro from '@/pages/Cartao/Cadastro'
 
 import Router from '../layouts/Router'
 
@@ -38,6 +40,20 @@ const routes = [
             path: 'excluir/:descricaoId',
             component: DescricaoListar,
             name: 'descricaoExcluir'
+          }
+        ]
+      },
+      {
+        path: 'cartao',
+        component: Router,
+        children: [
+          { path: 'listar', component: CartaoListar, name: 'cartaoListar' },
+          { path: 'cadastro', component: CartaoCadastro, name: 'cartaoCadastro' },
+          {
+            path: 'editar/:cartaoId',
+            component: CartaoCadastro,
+            name: 'cartaoEditar',
+            props: { contexto: 'editar' }
           }
         ]
       }
