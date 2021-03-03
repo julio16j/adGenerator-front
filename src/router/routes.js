@@ -4,8 +4,10 @@ import Dashboard from '@/pages/Dashboard'
 import CriarModelo from '@/pages/Modelo/CriarModelo'
 import DescricaoCadastro from '@/pages/DadosBasicos/Descricao/Cadastro'
 import DescricaoListar from '@/pages/DadosBasicos/Descricao/Listar'
-import CartaoListar from '@/pages/Cartao/Listar'
-import CartaoCadastro from '@/pages/Cartao/Cadastro'
+import CartaoListar from '@/pages/DadosBasicos/Cartao/Listar'
+import CartaoCadastro from '@/pages/DadosBasicos/Cartao/Cadastro'
+import TituloListar from '@/pages/DadosBasicos/Titulo/Listar'
+import TituloCadastro from '@/pages/DadosBasicos/Titulo/Cadastro'
 
 import Router from '../layouts/Router'
 
@@ -53,6 +55,20 @@ const routes = [
             path: 'editar/:cartaoId',
             component: CartaoCadastro,
             name: 'cartaoEditar',
+            props: { contexto: 'editar' }
+          }
+        ]
+      },
+      {
+        path: 'titulo',
+        component: Router,
+        children: [
+          { path: 'listar', component: TituloListar, name: 'tituloListar' },
+          { path: 'cadastro', component: TituloCadastro, name: 'tituloCadastro' },
+          {
+            path: 'editar/:tituloId',
+            component: TituloCadastro,
+            name: 'tituloEditar',
             props: { contexto: 'editar' }
           }
         ]

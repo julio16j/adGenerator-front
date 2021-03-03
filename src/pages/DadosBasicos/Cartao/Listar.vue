@@ -1,11 +1,11 @@
 <template>
   <div class="q-gutter-md">
     <q-breadcrumbs class="q-pl-md">
-      <q-breadcrumbs-el label="Movimentos" />
+      <q-breadcrumbs-el label="Cartão" />
       <q-breadcrumbs-el label="Listar" />
     </q-breadcrumbs>
 
-    <ListagemComFiltro titulo="Descrições" :inputs="inputs"
+    <ListagemComFiltro titulo="Cartões" :inputs="inputs"
       :cancelButton="cancelButton" :submitButton="submitButton"
       :tableColumns="tableColumns" :dataList="listaCartao"
       :editarBtn="editarBtn" :excluirBtn="excluirBtn" :cadastrarBtn="cadastrarBtn"

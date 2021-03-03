@@ -45,6 +45,22 @@
                 <q-item-label>Descrição</q-item-label>
               </q-item-section>
             </q-item>
+            <q-item clickable tag="a" v-ripple :to="{name: 'cartaoListar'}">
+              <q-item-section avatar>
+                <q-icon fa fa-dollar-sign name="fa fa-list" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Cartão</q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item clickable tag="a" v-ripple :to="{name: 'tituloListar'}">
+              <q-item-section avatar>
+                <q-icon fa fa-dollar-sign name="fa fa-list" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Título</q-item-label>
+              </q-item-section>
+            </q-item>
           </div>
         </q-expansion-item>
         <EssentialLink
