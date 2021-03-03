@@ -53,6 +53,14 @@
                 <q-item-label>Cartão</q-item-label>
               </q-item-section>
             </q-item>
+            <q-item clickable tag="a" v-ripple :to="{name: 'produtoListar'}">
+              <q-item-section avatar>
+                <q-icon fa fa-dollar-sign name="fa fa-list" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Produto</q-item-label>
+              </q-item-section>
+            </q-item>
             <q-item clickable tag="a" v-ripple :to="{name: 'tituloListar'}">
               <q-item-section avatar>
                 <q-icon fa fa-dollar-sign name="fa fa-list" />

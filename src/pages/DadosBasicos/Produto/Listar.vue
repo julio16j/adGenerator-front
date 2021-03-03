@@ -1,12 +1,12 @@
 <template>
   <div class="q-gutter-md">
     <q-breadcrumbs class="q-pl-md">
-      <q-breadcrumbs-el label="Títulos" />
+      <q-breadcrumbs-el label="Produtos" />
       <q-breadcrumbs-el label="Listar" />
     </q-breadcrumbs>
-    <ListagemComFiltro titulo="Títulos" :inputs="inputs"
+    <ListagemComFiltro titulo="Produtos" :inputs="inputs"
       :cancelButton="cancelButton" :submitButton="submitButton"
-      :tableColumns="tableColumns" :dataList="listaTitulo"
+      :tableColumns="tableColumns" :dataList="listaProduto"
       :editarBtn="editarBtn" :excluirBtn="excluirBtn" :cadastrarBtn="cadastrarBtn"
     />
   </div>
@@ -14,8 +14,8 @@
 
 <script>
 import ListagemComFiltro from '@/components/ListagemComFiltro'
-import { TamanhoOptions } from '@/classes/enums/Tamanho'
-import TituloService from '@/services/tituloService'
+import { CategoriaProdutoOptions } from '@/classes/enums/CategoriaProduto'
+import ProdutoService from '@/services/produtoService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
 
 export default {
@@ -29,41 +29,41 @@ export default {
   data () {
     return {
       inputs: [
+        { label: 'Nome', value: null, nome: 'nome', rules: '' },
         { label: 'Descrição', value: null, nome: 'descricao', rules: '' },
-        { label: 'Produto', value: null, nome: 'produto', rules: '' },
-        { label: 'Tamanho', value: null, nome: 'tamanho', options: TamanhoOptions, type: 'select', rules: '' }
+        { label: 'Categoria', value: null, nome: 'categoria', options: CategoriaProdutoOptions, type: 'select', rules: '' }
       ],
       tableColumns: [
         { name: 'acoes', label: 'Ações', align: 'center' },
+        { name: 'nome', label: 'Nome', field: 'nome', align: 'center' },
         { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'center' },
-        { name: 'produto', label: 'Produto', field: (linha) => { return linha.produto.nome }, align: 'center' },
-        { name: 'tamanho', label: 'Tamanho', field: 'tamanho', align: 'center' }
+        { name: 'categoria', label: 'Categoria', field: 'categoria', align: 'center' }
       ],
       cancelButton: {
         click: this.voltar
       },
       submitButton: {
-        submit: this.listarTitulo
+        submit: this.listarProduto
       },
-      listaTitulo: [],
+      listaProduto: [],
       editarBtn: {
         mostraBotao: true,
         editar: (linha) => {
           this.$router.push({
-            name: 'tituloEditar',
-            params: { tituloId: linha.descricao }
+            name: 'produtoEditar',
+            params: { produtoId: linha.nome }
           })
         }
       },
       excluirBtn: {
         mostraBotao: true,
         excluir: (linha) => {
-          this.excluirTitulo(linha.descricao)
+          this.excluirProduto(linha.nome)
         }
       },
       cadastrarBtn: {
         mostraBotao: true,
-        cadastrar: () => { this.$router.push({ name: 'tituloCadastro' }) }
+        cadastrar: () => { this.$router.push({ name: 'produtoCadastro' }) }
       }
     }
   },
@@ -71,19 +71,19 @@ export default {
     voltar () {
       this.$router.back()
     },
-    listarTitulo (titulo) {
-      TituloService.pesquisar(titulo)
+    listarProduto (produto) {
+      ProdutoService.pesquisar(produto)
         .then(response => {
           if (response.status === 200) {
-            this.listaTitulo = response.data
+            this.listaProduto = response.data
           }
         }).catch(error => {
           this.notificacaoErro(error.message)
         })
     },
-    excluirTitulo (tituloId) {
-      TituloService.deleteById(tituloId)
-        .then(this.listarTitulo)
+    excluirProduto (produtoId) {
+      ProdutoService.deleteById(produtoId)
+        .then(this.listarProduto)
     }
   }
 }

@@ -8,6 +8,8 @@ import CartaoListar from '@/pages/DadosBasicos/Cartao/Listar'
 import CartaoCadastro from '@/pages/DadosBasicos/Cartao/Cadastro'
 import TituloListar from '@/pages/DadosBasicos/Titulo/Listar'
 import TituloCadastro from '@/pages/DadosBasicos/Titulo/Cadastro'
+import ProdutoListar from '@/pages/DadosBasicos/Produto/Listar'
+import ProdutoCadastro from '@/pages/DadosBasicos/Produto/Cadastro'
 
 import Router from '../layouts/Router'
 
@@ -69,6 +71,20 @@ const routes = [
             path: 'editar/:tituloId',
             component: TituloCadastro,
             name: 'tituloEditar',
+            props: { contexto: 'editar' }
+          }
+        ]
+      },
+      {
+        path: 'produto',
+        component: Router,
+        children: [
+          { path: 'listar', component: ProdutoListar, name: 'produtoListar' },
+          { path: 'cadastro', component: ProdutoCadastro, name: 'produtoCadastro' },
+          {
+            path: 'editar/:produtoId',
+            component: ProdutoCadastro,
+            name: 'produtoEditar',
             props: { contexto: 'editar' }
           }
         ]
