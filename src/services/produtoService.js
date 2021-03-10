@@ -14,11 +14,15 @@ export default {
   listar () {
     return api.get(URL.listar())
   },
-  cadastrar (produto) {
-    return api.post(URL.cadastrar(), produto)
+  cadastrar (formData) {
+    return api.post(URL.cadastrar(), formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   },
-  editar (produto) {
-    return api.put(URL.editar(), produto)
+  editar (formData) {
+    return api.put(URL.editar(), formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   },
   getById (produtoId) {
     return api.get(URL.getById(produtoId))

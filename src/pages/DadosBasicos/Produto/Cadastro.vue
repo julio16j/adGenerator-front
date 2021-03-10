@@ -10,6 +10,7 @@ import CardForm from '@/components/CardForm'
 import { CategoriaProdutoOptions } from '@/classes/enums/CategoriaProduto'
 import Mensagems from '@/classes/enums/Mensagens'
 import ProdutoService from '@/services/produtoService'
+import StorageService from '@/services/storageService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
 
 export default {
@@ -31,7 +32,7 @@ export default {
         { label: 'Nome', value: null, nome: 'nome', readonly: this.contexto === 'editar' },
         { label: 'Descricao', value: null, nome: 'descricao' },
         { label: 'Categoria', value: null, nome: 'categoria', options: CategoriaProdutoOptions, type: 'select' },
-        { label: 'Imagem', value: null, nome: 'imagemBase64', type: 'file' }
+        { label: 'Imagem', value: null, nome: 'imagemProduto', type: 'file' }
       ],
       cancelButton: {
         click: () => this.voltar()
@@ -45,6 +46,12 @@ export default {
     voltar () {
       this.$router.back()
     },
+    getImagem (fileName) {
+      StorageService.download(fileName)
+        .then(response => {
+          this.inputs[3].value = new Blob([response.data])
+        })
+    },
     getProduto (produtoValorId) {
       ProdutoService.getById(produtoValorId)
         .then(response => {
@@ -52,44 +59,43 @@ export default {
             this.inputs[0].value = response.data.nome
             this.inputs[1].value = response.data.descricao
             this.inputs[2].value = response.data.categoria
-            this.inputs[3].value = response.data.caminhoImagem
+            this.getImagem(response.data.caminhoImagem)
           }
         })
     },
     salvarProduto (produto) {
-      var file = document.querySelector('input[type=file]').files[0]
-      var reader = new FileReader()
-      reader.onload = (e) => {
-        produto.imagemBase64 = e.target.result
-        produto.imagemBase64 = produto.imagemBase64.replace(/^data:image\/(png|jpg);base64,/, '')
+      const { nome, descricao, categoria, imagemProduto } = produto
 
-        if (this.contexto === 'cadastro') {
-          ProdutoService.cadastrar(produto)
-            .then(response => {
-              if (response.status === 200) {
-                this.notificacaoSucesso(Mensagems.OperacaoExecutada)
-                this.$router.back()
-              }
-            }).catch(error => {
-              this.notificacaoErro(error.message)
-            })
-        } else {
-          ProdutoService.editar(produto)
-            .then(response => {
-              if (response.status === 200) {
-                this.notificacaoSucesso(Mensagems.OperacaoExecutada)
-                this.$router.back()
-              }
-            }).catch(error => {
-              this.notificacaoErro(error.message)
-            })
-        }
+      const formData = new FormData()
+
+      formData.append('produto', JSON.stringify({ nome, descricao, categoria }))
+      formData.append('imagemProduto', imagemProduto)
+
+      if (this.contexto === 'cadastro') {
+        ProdutoService.cadastrar(formData)
+          .then(response => {
+            if (response.status === 200) {
+              this.notificacaoSucesso(Mensagems.OperacaoExecutada)
+              this.$router.back()
+            }
+          }).catch(error => {
+            this.notificacaoErro(error.message)
+          })
+      } else {
+        ProdutoService.editar(formData)
+          .then(response => {
+            if (response.status === 200) {
+              this.notificacaoSucesso(Mensagems.OperacaoExecutada)
+              this.$router.back()
+            }
+          }).catch(error => {
+            this.notificacaoErro(error.message)
+          })
       }
-      reader.readAsDataURL(file)
-    },
-    imprimeXablau (xablau) {
-      console.log(xablau)
     }
+  },
+  imprimeXablau (xablau) {
+    console.log(xablau)
   }
 }
 </script>

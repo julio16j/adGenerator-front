@@ -15,11 +15,15 @@ export default {
   listar () {
     return api.get(URL.listar())
   },
-  cadastrar (cartao) {
-    return api.post(URL.cadastrar(), cartao)
+  cadastrar (formData) {
+    return api.post(URL.cadastrar(), formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   },
-  editar (cartao) {
-    return api.put(URL.editar(), cartao)
+  editar (formData) {
+    return api.put(URL.editar(), formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    })
   },
   getById (cartaoId) {
     return api.get(URL.getById(cartaoId))

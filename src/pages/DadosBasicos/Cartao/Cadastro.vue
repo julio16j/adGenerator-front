@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-center">
+  <div class="flex flex-column flex-center">
     <CardForm titulo="Cadastro de Cartão" :inputs="inputs"
       :cancelButton="cancelButton" :submitButton="submitButton" />
   </div>
@@ -9,6 +9,7 @@
 import CardForm from '@/components/CardForm'
 import Mensagems from '@/classes/enums/Mensagens'
 import CartaoService from '@/services/cartaoService'
+import StorageService from '@/services/storageService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
 
 export default {
@@ -26,11 +27,10 @@ export default {
   },
   data () {
     return {
-      imageData: '',
       inputs: [
         { label: 'Nome', value: null, nome: 'nome', readonly: this.contexto === 'editar' },
         { label: 'Descrição', value: null, nome: 'descricao' },
-        { label: 'Imagem', value: null, nome: 'imagemBase64', type: 'file' }
+        { label: 'Imagem', value: null, nome: 'imagemCartao', type: 'file' }
       ],
       cancelButton: {
         click: () => this.voltar()
@@ -44,46 +44,53 @@ export default {
     voltar () {
       this.$router.back()
     },
+    getImagem (fileName) {
+      StorageService.download(fileName)
+        .then(response => {
+          const blob = new Blob([response.data])
+          const file = new File([blob], fileName)
+          this.inputs[2].value = file
+        })
+    },
     getCartao (cartaoId) {
       CartaoService.getById(cartaoId)
         .then(response => {
           if (response.status === 200) {
             this.inputs[0].value = response.data.nome
             this.inputs[1].value = response.data.descricao
-            this.inputs[2].value = response.data.caminhoImagem
+            this.getImagem(response.data.caminhoImagem)
           }
         })
     },
     salvarCartao (cartao) {
-      var file = document.querySelector('input[type=file]').files[0]
-      var reader = new FileReader()
-      reader.onload = (e) => {
-        cartao.imagemBase64 = e.target.result
-        cartao.imagemBase64 = cartao.imagemBase64.replace(/^data:image\/(png|jpg);base64,/, '')
+      const { nome, descricao, imagemCartao } = cartao
 
-        if (this.contexto === 'cadastro') {
-          CartaoService.cadastrar(cartao)
-            .then(response => {
-              if (response.status === 200) {
-                this.notificacaoSucesso(Mensagems.OperacaoExecutada)
-                this.$router.back()
-              }
-            }).catch(error => {
-              this.notificacaoErro(error.message)
-            })
-        } else {
-          CartaoService.editar(cartao)
-            .then(response => {
-              if (response.status === 200) {
-                this.notificacaoSucesso(Mensagems.OperacaoExecutada)
-                this.$router.back()
-              }
-            }).catch(error => {
-              this.notificacaoErro(error.message)
-            })
-        }
+      const formData = new FormData()
+
+      formData.append('cartao', JSON.stringify({ nome, descricao }))
+      formData.append('imagemCartao', imagemCartao)
+
+      if (this.contexto === 'cadastro') {
+        CartaoService.cadastrar(formData)
+          .then(response => {
+            if (response.status === 200) {
+              this.notificacaoSucesso(Mensagems.OperacaoExecutada)
+              this.$router.back()
+            }
+          }).catch(error => {
+            this.notificacaoErro(error.message)
+          })
+      } else {
+        CartaoService.editar(formData)
+          .then(response => {
+            if (response.status === 200) {
+              this.notificacaoSucesso(Mensagems.OperacaoExecutada)
+              this.$router.back()
+            }
+          }).catch(error => {
+            this.notificacaoErro(error.message)
+          })
       }
-      reader.readAsDataURL(file)
     },
     imprimeXablau (xablau) {
       console.log(xablau)
