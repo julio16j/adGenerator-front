@@ -27,6 +27,7 @@ export default {
   },
   data () {
     return {
+      imageData: '',
       inputs: [
         { label: 'Nome', value: null, nome: 'nome', readonly: this.contexto === 'editar' },
         { label: 'Descrição', value: null, nome: 'descricao' },
@@ -47,8 +48,9 @@ export default {
     getImagem (fileName) {
       StorageService.download(fileName)
         .then(response => {
-          const blob = new Blob([response.data])
-          const file = new File([blob], fileName)
+          const [, name] = fileName.split('_')
+          const file = new File([response.data], name, { type: 'image/png' })
+
           this.inputs[2].value = file
         })
     },
@@ -66,11 +68,10 @@ export default {
       const { nome, descricao, imagemCartao } = cartao
 
       const formData = new FormData()
-
-      formData.append('cartao', JSON.stringify({ nome, descricao }))
       formData.append('imagemCartao', imagemCartao)
 
       if (this.contexto === 'cadastro') {
+        formData.append('novoCartao', JSON.stringify({ nome, descricao }))
         CartaoService.cadastrar(formData)
           .then(response => {
             if (response.status === 200) {
@@ -81,6 +82,7 @@ export default {
             this.notificacaoErro(error.message)
           })
       } else {
+        formData.append('cartao', JSON.stringify({ nome, descricao }))
         CartaoService.editar(formData)
           .then(response => {
             if (response.status === 200) {
