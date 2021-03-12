@@ -40,6 +40,7 @@ export default {
       this.inputs.map(input => {
         form[input.nome] = input.value
       })
+      this.$emit('formMontado', form)
       return form
     }
   }

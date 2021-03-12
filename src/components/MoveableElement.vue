@@ -66,6 +66,8 @@ export default {
   },
   created () {
     if (this.element.tipo !== 'imagem') this.moveable.rotatable = false
+    if (this.foco) this.ligaFoco()
+    else this.desligaFoco()
   },
   watch: {
     foco: function (val) {

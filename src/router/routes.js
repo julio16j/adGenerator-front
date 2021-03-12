@@ -10,6 +10,7 @@ import TituloListar from '@/pages/DadosBasicos/Titulo/Listar'
 import TituloCadastro from '@/pages/DadosBasicos/Titulo/Cadastro'
 import ProdutoListar from '@/pages/DadosBasicos/Produto/Listar'
 import ProdutoCadastro from '@/pages/DadosBasicos/Produto/Cadastro'
+import VariacoesListar from '@/pages/Variacoes/Listar'
 
 import Router from '../layouts/Router'
 
@@ -87,6 +88,14 @@ const routes = [
             name: 'produtoEditar',
             props: { contexto: 'editar' }
           }
+        ]
+      },
+      {
+        path: 'variacoes',
+        component: Router,
+        children: [
+          { path: 'listar', component: VariacoesListar, name: 'variacoesListar' },
+          { path: 'gerar', component: VariacoesListar, name: 'variacoesGerar' }
         ]
       }
     ]
