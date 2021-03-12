@@ -49,7 +49,10 @@ export default {
     getImagem (fileName) {
       StorageService.download(fileName)
         .then(response => {
-          this.inputs[3].value = new Blob([response.data])
+          const [, name] = fileName.split('_')
+          const file = new File([response.data], name, { type: 'image/png' })
+
+          this.inputs[3].value = file
         })
     },
     getProduto (produtoValorId) {
@@ -67,11 +70,10 @@ export default {
       const { nome, descricao, categoria, imagemProduto } = produto
 
       const formData = new FormData()
-
-      formData.append('produto', JSON.stringify({ nome, descricao, categoria }))
       formData.append('imagemProduto', imagemProduto)
 
       if (this.contexto === 'cadastro') {
+        formData.append('novoProduto', JSON.stringify({ nome, descricao, categoria }))
         ProdutoService.cadastrar(formData)
           .then(response => {
             if (response.status === 200) {
@@ -82,6 +84,7 @@ export default {
             this.notificacaoErro(error.message)
           })
       } else {
+        formData.append('produto', JSON.stringify({ nome, descricao, categoria }))
         ProdutoService.editar(formData)
           .then(response => {
             if (response.status === 200) {
