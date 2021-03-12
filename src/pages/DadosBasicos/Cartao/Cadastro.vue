@@ -27,7 +27,6 @@ export default {
   },
   data () {
     return {
-      imageData: '',
       inputs: [
         { label: 'Nome', value: null, nome: 'nome', readonly: this.contexto === 'editar' },
         { label: 'Descrição', value: null, nome: 'descricao' },
@@ -46,12 +45,16 @@ export default {
       this.$router.back()
     },
     getImagem (fileName) {
-      StorageService.download(fileName)
-        .then(response => {
+      const url = this.urlImagem(fileName)
+
+      fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
           const [, name] = fileName.split('_')
-          const file = new File([response.data], name, { type: 'image/png' })
+          const file = new File([blob], name)
 
           this.inputs[2].value = file
+          this.inputs[2].url = url
         })
     },
     getCartao (cartaoId) {
@@ -72,6 +75,7 @@ export default {
 
       if (this.contexto === 'cadastro') {
         formData.append('novoCartao', JSON.stringify({ nome, descricao }))
+
         CartaoService.cadastrar(formData)
           .then(response => {
             if (response.status === 200) {
@@ -83,6 +87,7 @@ export default {
           })
       } else {
         formData.append('cartao', JSON.stringify({ nome, descricao }))
+
         CartaoService.editar(formData)
           .then(response => {
             if (response.status === 200) {
@@ -96,6 +101,9 @@ export default {
     },
     imprimeXablau (xablau) {
       console.log(xablau)
+    },
+    urlImagem (fileName) {
+      return StorageService.downloadUrl(fileName)
     }
   }
 }

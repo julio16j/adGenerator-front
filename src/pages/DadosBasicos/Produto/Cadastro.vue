@@ -1,7 +1,11 @@
 <template>
   <div class="flex flex-center">
-    <CardForm titulo="Cadastro de Produtos" :inputs="inputs"
-      :cancelButton="cancelButton" :submitButton="submitButton" />
+    <CardForm
+      titulo="Cadastro de Produtos"
+      :inputs="inputs"
+      :cancelButton="cancelButton"
+      :submitButton="submitButton"
+    />
   </div>
 </template>
 
@@ -47,12 +51,16 @@ export default {
       this.$router.back()
     },
     getImagem (fileName) {
-      StorageService.download(fileName)
-        .then(response => {
+      const url = this.urlImagem(fileName)
+
+      fetch(url)
+        .then(response => response.blob())
+        .then(blob => {
           const [, name] = fileName.split('_')
-          const file = new File([response.data], name, { type: 'image/png' })
+          const file = new File([blob], name)
 
           this.inputs[3].value = file
+          this.inputs[3].url = url
         })
     },
     getProduto (produtoValorId) {
@@ -95,10 +103,13 @@ export default {
             this.notificacaoErro(error.message)
           })
       }
+    },
+    imprimeXablau (xablau) {
+      console.log(xablau)
+    },
+    urlImagem (fileName) {
+      return StorageService.downloadUrl(fileName)
     }
-  },
-  imprimeXablau (xablau) {
-    console.log(xablau)
   }
 }
 </script>

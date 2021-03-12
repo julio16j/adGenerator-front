@@ -40,7 +40,14 @@
                     <q-icon name="create_new_folder"></q-icon>
                   </template>
                 </q-file>
-                <img v-if="url" :src="url" alt="imagemCartao" style="width: calc(100% - 16px)">
+
+                <q-img
+                  v-if="url || input.url"
+                  :src="url || input.url"
+                  spinner-color="white"
+                  alt="imagemCartao"
+                  style="width: calc(100% - 16px)"
+                />
               </div>
 
               <q-select
