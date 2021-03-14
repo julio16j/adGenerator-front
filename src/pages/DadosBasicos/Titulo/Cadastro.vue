@@ -29,7 +29,7 @@ export default {
     return {
       inputs: [
         { label: 'Descrição', value: null, nome: 'descricao', readonly: this.contexto === 'editar' },
-        { label: 'Produto', value: null, nome: 'produto' },
+        { label: 'Produto', value: null, nome: 'produtoId' },
         { label: 'Tamanho', value: null, nome: 'tamanho', options: TamanhoOptions, type: 'select' }
       ],
       cancelButton: {
@@ -55,10 +55,6 @@ export default {
         })
     },
     salvarTitulo (titulo) {
-      const nome = titulo.produto
-      titulo.produto = {
-        nome: nome
-      }
       if (this.contexto === 'cadastro') {
         TituloService.cadastrar(titulo)
           .then(response => {
