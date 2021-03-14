@@ -14,12 +14,12 @@
         <div @click.self="desligaFoco" class="row justify-center">
           <div style="border: 1px solid black; height: 400px; width: 400px; position: relative"
             @click.self="desligaFoco" >
-            <MoveableElement @focou="()=>{element.foco = true}"
+            <moveable-element @focou="()=>{element.foco = true}"
               @excluirElemento="excluirElemento"
               @transform="tranformarElemento"
               v-for="element in elements" :key="element.id"
               :element="element" :foco="element.foco"
-              :style="element.style"
+              :style="element.absolute"
             />
           </div>
         </div>
@@ -70,7 +70,8 @@ export default {
       descricoes: [],
       cartoes: []
     },
-    abreNomeDialog: false
+    abreNomeDialog: false,
+    elementsSequence: 0
   }),
   methods: {
     temElementosByTipo (tipo) {
@@ -85,44 +86,52 @@ export default {
     addTitle () {
       if (!this.temElementosByTipo(TipoElemento.Titulo)) {
         this.elements.push({
-          id: this.elements.length,
+          id: this.elementsSequence,
           tipo: TipoElemento.Titulo,
           value: 'Titulo',
-          style: 'position: absolute; right: 200px',
+          absolute: 'position: absolute; right: 200px; z-index:1;',
+          style: 'font-size: 16px; color: black;',
           foco: true,
           transform: {}
         })
+        this.elementsSequence++
       }
     },
     addDescricao () {
       this.elements.push({
-        id: this.elements.length,
+        id: this.elementsSequence,
         tipo: TipoElemento.Descricao,
-        style: 'position: absolute; bottom: 200px',
+        absolute: 'position: absolute; bottom: 200px;z-index:1;',
+        style: 'font-size: 12px; color: black;',
         value: 'Descrição',
         foco: true,
         transform: {}
       })
+      this.elementsSequence++
     },
     addCartao () {
       this.elements.push({
-        id: this.elements.length,
+        id: this.elementsSequence,
         tipo: TipoElemento.cartao,
-        style: 'position: absolute; top: 0; right: 300px',
+        absolute: 'position: absolute; top: 0; right: 300px;',
+        style: 'font-size: 12px; color: white; height: 40px;',
         value: 'Cartão',
         foco: true,
         transform: {}
       })
+      this.elementsSequence++
     },
     addImage () {
       if (!this.temElementosByTipo(TipoElemento.Imagem)) {
         this.elements.push({
-          id: this.elements.length,
+          id: this.elementsSequence,
           tipo: TipoElemento.Imagem,
-          style: 'position: absolute; top: 0',
+          absolute: 'position: absolute; top: 0;',
+          style: 'color: white; width: 200px; height: 200px;',
           foco: true,
           transform: {}
         })
+        this.elementsSequence++
       }
     },
     desligaFoco () {
@@ -168,7 +177,7 @@ export default {
           modelo.imagem = {
             elementoImagem: {
               value: 'imagem',
-              estiloInicial: ele.style
+              estiloInicial: ele.style + ele.absolute
             },
             transformacao: ele.transform
           }
@@ -176,7 +185,7 @@ export default {
           modelo.titulo = {
             elementoTitulo: {
               value: ele.value,
-              estiloInicial: ele.style
+              estiloInicial: ele.style + ele.absolute
             },
             transformacao: ele.transform
           }
@@ -184,7 +193,7 @@ export default {
           modelo.descricoes.push({
             elementoDescricao: {
               value: ele.value,
-              estiloInicial: ele.style
+              estiloInicial: ele.style + ele.absolute
             },
             transformacao: ele.transform
           })
@@ -192,7 +201,7 @@ export default {
           modelo.cartoes.push({
             elementoCartao: {
               value: ele.value,
-              estiloInicial: ele.style
+              estiloInicial: ele.style + ele.absolute
             },
             transformacao: ele.transform
           })

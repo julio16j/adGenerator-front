@@ -100,7 +100,7 @@ export default {
         })
     },
     detalharModelo (modeloId) {
-      console.log(modeloId)
+      this.$router.push({ name: 'variacoesListar', params: { modeloId } })
     }
   }
 }

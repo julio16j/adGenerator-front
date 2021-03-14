@@ -78,6 +78,13 @@ export default {
   props: {
     contexto: { type: String, default: 'listar' }
   },
+  created () {
+    if (this.$route.params.modeloId) {
+      this.filtroVariacao.modeloId = this.$route.params.modeloId
+      this.inputs[0].value = this.filtroVariacao.modeloId
+      this.listarVariacao(this.filtroVariacao)
+    }
+  },
   mixins: [NotificacaoMixin],
   data () {
     return {

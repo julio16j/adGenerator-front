@@ -12,7 +12,7 @@
       >
         <div class="relative-position">
           <q-btn v-show="element.foco" color="primary" padding="none" style="position: absolute; right: 1px; top: -30px" icon="far fa-times-circle" flat @click="excluirElement"/>
-          <div @click="focou" class="flex flex-center elementoMovel" style="color: white; width: 200px; height: 200px; background-color: #333333; cursor:pointer">
+          <div @click="focou" class="flex flex-center elementoMovel" :style=" element.style + 'background-color: #333333; cursor:pointer'">
             Imagem do Produto
           </div>
         </div>
@@ -30,7 +30,7 @@
       >
         <div class="relative-position">
           <q-btn size="sm" v-show="element.foco" color="primary" padding="none" style="position: absolute; right: 1px; top: -20px" icon="far fa-times-circle" flat @click="excluirElement"/>
-          <div @click="focou" class="flex flex-center elementoMovel" style="font-size: 12px; color: white; background-color: #333333; cursor:pointer" >
+          <div @click="focou" class="flex flex-center elementoMovel" :style=" element.style + 'cursor:pointer;'" >
             {{ element.value }}
           </div>
         </div>
@@ -48,7 +48,7 @@
       >
         <div class="relative-position">
           <q-btn size="sm" v-show="element.foco" color="primary" padding="none" style="position: absolute; right: 1px; top: -20px" icon="far fa-times-circle" flat @click="excluirElement"/>
-          <div @click="focou" class="flex flex-center elementoMovel" style="font-size: 12px; color: white; background-color: #333333; cursor:pointer; height: 40px" >
+          <div @click="focou" class="flex flex-center elementoMovel" :style="element.style + 'background-color: #333333; cursor:pointer;'" >
             {{ element.value }}
           </div>
         </div>
