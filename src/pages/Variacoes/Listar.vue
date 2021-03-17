@@ -111,6 +111,11 @@ export default {
         submit: this.listarVariacao
       },
       listaVariacao: [],
+      transformacao: {
+        rotate: null,
+        scale: null,
+        translate: null
+      },
       excluirBtn: {
         mostraBotao: true,
         excluir: (linha) => {
@@ -178,6 +183,9 @@ export default {
     },
     transformarElemento (setup, transformacao, elemento) {
       let style = setup[elemento].estiloInicial + ' ;transform: '
+      if (transformacao === null) {
+        transformacao = this.transformacao
+      }
       style += transformacao.translate == null ? '' : transformacao.translate + ' '
       style += transformacao.rotate == null ? '' : transformacao.rotate + ' '
       style += transformacao.scale == null ? '' : transformacao.scale
