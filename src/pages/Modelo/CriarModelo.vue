@@ -63,6 +63,14 @@ export default {
   components: {
     MoveableElement
   },
+  props: {
+    contexto: { type: String, default: 'cadastro' }
+  },
+  created () {
+    if (this.contexto === 'editar') {
+      this.getModelo(this.$route.params.modeloId)
+    }
+  },
   data: () => ({
     elements: [],
     modelo: {
@@ -74,6 +82,12 @@ export default {
     elementsSequence: 0
   }),
   methods: {
+    getModelo (modeloId) {
+      ModeloService.getById(modeloId)
+        .then(response => {
+          console.log(response.data)
+        })
+    },
     temElementosByTipo (tipo) {
       const listaElementosByTipo = this.elements.filter((element, index) => {
         if (element.tipo === tipo) {

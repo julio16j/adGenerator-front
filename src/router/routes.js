@@ -26,7 +26,13 @@ const routes = [
         path: 'modelo',
         component: Router,
         children: [
-          { path: 'adicionar', component: CriarModelo, name: 'criarModelo' }
+          { path: 'adicionar', component: CriarModelo, name: 'criarModelo' },
+          {
+            path: 'editar/:modeloId',
+            component: CriarModelo,
+            name: 'editarModelo',
+            props: { contexto: 'editar' }
+          }
         ]
       },
       {

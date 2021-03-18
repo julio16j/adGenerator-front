@@ -14,6 +14,7 @@
       :cancelButton="cancelButton" :submitButton="submitButton"
       :tableColumns="tableColumns" :dataList="listaModelo"
       :excluirBtn="excluirBtn" :detalharBtn="detalharBtn"
+      :editarBtn="editarBtn"
     />
   </div>
 </template>
@@ -53,6 +54,15 @@ export default {
         mostraBotao: true,
         detalhar: (linha) => {
           this.detalharModelo(linha.nome)
+        }
+      },
+      editarBtn: {
+        mostraBotao: true,
+        editar: (linha) => {
+          this.$router.push({
+            name: 'editarModelo',
+            params: { modeloId: linha.nome }
+          })
         }
       },
       excluirBtn: {
