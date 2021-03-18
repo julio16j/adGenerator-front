@@ -14,27 +14,29 @@
         <simple-form :inputs="inputs" :submitButton="submitButton" />
       </q-card-section>
     </q-card>
-    <q-card>
+    <q-card class="q-mt-md">
       <q-table v-if="dataList.length > 0" :data="dataList" :columns="tableColumns"
         class="no-shadow q-pa-none" >
         <template v-slot:body-cell-acoes="props">
           <q-td :props="props">
             <div class="q-ml-sm q-mr-sm paddingBtns">
-              <q-btn v-if="detalharBtn.mostraBotao" :size="size" flat round
-                icon="fa fa-eye" color="green-6" @click="() => detalharBtn.detalhar(props.row)" >
+              <q-btn v-if="detalharBtn.mostraBotao" flat round
+                @click="() => detalharBtn.detalhar(props.row)" >
+                <q-icon name="fa fa-eye" style="font-size: 1em;" color="green-6" />
                 <q-tooltip anchor="top middle" self="center middle">
                   {{ detalharBtn.label || 'Detalhar' }}
                 </q-tooltip>
               </q-btn>
-              <q-btn v-if="editarBtn.mostraBotao" :size="size" flat round
-                icon="fa fa-pencil-alt" color="grey-8" @click="() => editarBtn.editar(props.row)" >
+              <q-btn v-if="editarBtn.mostraBotao" flat round
+                @click="() => editarBtn.editar(props.row)" >
+                <q-icon name="fa fa-pencil-alt" style="font-size: 1em;" color="grey-8" />
                 <q-tooltip anchor="top middle" self="center middle">
                   {{ editarBtn.label || 'Alterar' }}
                 </q-tooltip>
               </q-btn>
-              <q-btn v-if="excluirBtn.mostraBotao" :size="size" flat round
-                @click="() => excluirBtn.excluir(props.row)"
-                icon="fa fa-ban" color="red">
+              <q-btn v-if="excluirBtn.mostraBotao" flat round
+                @click="() => excluirBtn.excluir(props.row)">
+                <q-icon name="fa fa-ban" style="font-size: 1em;" color="red" />
                 <q-tooltip anchor="top middle"
                   self="center middle">{{ excluirBtn.label || 'Excluir' }}</q-tooltip>
               </q-btn>
@@ -123,7 +125,7 @@ export default {
   },
   data () {
     return {
-      size: 'sm'
+      size: '5px'
     }
   }
 }

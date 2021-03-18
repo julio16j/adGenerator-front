@@ -8,10 +8,14 @@
         @drag="handleDrag"
         @scale="handleScale"
         @rotate="handleRotate"
-        style="width: 200px; height: 200px"
+        style="width: 12.5em; height: 12.5em"
       >
         <div class="relative-position">
-          <q-btn v-show="element.foco" color="primary" padding="none" style="position: absolute; right: 1px; top: -30px" icon="far fa-times-circle" flat @click="excluirElement"/>
+          <q-btn v-show="element.foco" padding="none" flat
+            style="position: absolute; right: 1px; top: -30px;"
+            @click="excluirElement">
+            <q-icon name="far fa-times-circle" style="font-size: 1em;" color="primary" />
+          </q-btn>
           <div @click="focou" class="flex flex-center elementoMovel" :style=" element.style + 'background-color: #333333; cursor:pointer'">
             Imagem do Produto
           </div>
@@ -26,10 +30,14 @@
         @drag="handleDrag"
         @scale="handleScale"
         @rotate="handleRotate"
-        style="width: 60px"
+        style="width: 3.75em"
       >
         <div class="relative-position">
-          <q-btn size="sm" v-show="element.foco" color="primary" padding="none" style="position: absolute; right: 1px; top: -20px" icon="far fa-times-circle" flat @click="excluirElement"/>
+          <q-btn v-show="element.foco" padding="none" flat
+            style="position: absolute; right: 1px; top: -20px;"
+            @click="excluirElement">
+            <q-icon name="far fa-times-circle" style="font-size: 1em;" color="primary" />
+          </q-btn>
           <div @click="focou" class="flex flex-center elementoMovel" :style=" element.style + 'cursor:pointer;'" >
             {{ element.value }}
           </div>
@@ -44,10 +52,14 @@
         @drag="handleDrag"
         @scale="handleScale"
         @rotate="handleRotate"
-        style="width: 60px; height: 40px"
+        style="width: 3.75em; height: 2.5em"
       >
         <div class="relative-position">
-          <q-btn size="sm" v-show="element.foco" color="primary" padding="none" style="position: absolute; right: 1px; top: -20px" icon="far fa-times-circle" flat @click="excluirElement"/>
+          <q-btn v-show="element.foco" padding="none" flat
+            style="position: absolute; right: 1px; top: -20px;"
+            @click="excluirElement">
+            <q-icon name="far fa-times-circle" style="font-size: 1em;" color="primary" />
+          </q-btn>
           <div @click="focou" class="flex flex-center elementoMovel" :style="element.style + 'background-color: #333333; cursor:pointer;'" >
             {{ element.value }}
           </div>

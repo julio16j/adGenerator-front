@@ -1,18 +1,18 @@
 <template>
-  <q-page class="flex flex-center" @click.self="desligaFoco">
+  <q-page class="flex justify-center" @click.self="desligaFoco">
     <div @click.self="desligaFoco" >
       <div @click.self="desligaFoco">
-        <div class="row justify-center q-mb-md text-h4 colorPrimary" @click.self="desligaFoco">
-          <div class="col">
+        <div class="row justify-center q-my-md text-h4 colorPrimary" @click.self="desligaFoco">
+          <div class="col text-h5 text-center q-pl-md flex items-center">
             Cadastro de Modelos
           </div>
-          <div class="q-ml-md q-gutter-x-md">
+          <div class="q-ml-md q-gutter-x-md q-pr-md">
             <q-btn label="Voltar" @click="voltar" color="dark" />
             <q-btn label="Salvar" @click="abrirDialog" icon="check" color="green" />
           </div>
         </div>
         <div @click.self="desligaFoco" class="row justify-center">
-          <div style="border: 1px solid black; height: 400px; width: 400px; position: relative"
+          <div style="border: 1px solid black; height: 25em; width: 25em; position: relative"
             @click.self="desligaFoco" >
             <moveable-element @focou="()=>{element.foco = true}"
               @excluirElemento="excluirElemento"
@@ -23,7 +23,7 @@
             />
           </div>
         </div>
-        <div class="row justify-center q-mt-md" @click.self="desligaFoco" >
+        <div class="row justify-center q-mt-md q-px-md" @click.self="desligaFoco" >
             <q-btn-group push  >
               <q-btn push color="primary" label="Imagem" icon="image" @click="addImage" />
               <q-btn push color="primary" label="Título" icon="title" @click="addTitle" />
@@ -57,6 +57,7 @@ import TipoElemento from '@/classes/enums/TipoElemento'
 import Mensagens from '@/classes/enums/Mensagens'
 import ModeloService from '@/services/modeloService.js'
 import notificacaoMixin from '@/mixins/notificacaoMixin'
+import { fontSizeAtual, converterPxToEm } from '@/utils'
 export default {
   name: 'CriarModelo',
   mixins: [notificacaoMixin],
@@ -90,7 +91,7 @@ export default {
           tipo: TipoElemento.Titulo,
           value: 'Titulo',
           absolute: 'position: absolute; right: 200px; z-index:1;',
-          style: 'font-size: 16px; color: black;',
+          style: 'font-size: 1em; color: black;',
           foco: true,
           transform: {}
         })
@@ -102,7 +103,7 @@ export default {
         id: this.elementsSequence,
         tipo: TipoElemento.Descricao,
         absolute: 'position: absolute; bottom: 200px;z-index:1;',
-        style: 'font-size: 12px; color: black;',
+        style: 'color: black;',
         value: 'Descrição',
         foco: true,
         transform: {}
@@ -113,8 +114,8 @@ export default {
       this.elements.push({
         id: this.elementsSequence,
         tipo: TipoElemento.cartao,
-        absolute: 'position: absolute; top: 0; right: 300px;',
-        style: 'font-size: 12px; color: white; height: 40px;',
+        absolute: 'position: absolute; top: 0; right: 20px;',
+        style: 'color: white; height: 2.5em;',
         value: 'Cartão',
         foco: true,
         transform: {}
@@ -127,12 +128,13 @@ export default {
           id: this.elementsSequence,
           tipo: TipoElemento.Imagem,
           absolute: 'position: absolute; top: 0;',
-          style: 'color: white; width: 200px; height: 200px;',
+          style: 'color: white; width: 12.5em; height: 12.5em;',
           foco: true,
           transform: {}
         })
         this.elementsSequence++
       }
+      console.log(window.innerWidth)
     },
     desligaFoco () {
       this.elements = this.elements.map(element => {
@@ -179,7 +181,7 @@ export default {
               value: 'imagem',
               estiloInicial: ele.style + ele.absolute
             },
-            transformacao: ele.transform
+            transformacao: this.tratarTransform(ele.transform)
           }
         } else if (ele.tipo === TipoElemento.Titulo) {
           modelo.titulo = {
@@ -187,7 +189,7 @@ export default {
               value: ele.value,
               estiloInicial: ele.style + ele.absolute
             },
-            transformacao: ele.transform
+            transformacao: this.tratarTransform(ele.transform)
           }
         } else if (ele.tipo === TipoElemento.Descricao) {
           modelo.descricoes.push({
@@ -195,7 +197,7 @@ export default {
               value: ele.value,
               estiloInicial: ele.style + ele.absolute
             },
-            transformacao: ele.transform
+            transformacao: this.tratarTransform(ele.transform)
           })
         } else {
           modelo.cartoes.push({
@@ -203,11 +205,51 @@ export default {
               value: ele.value,
               estiloInicial: ele.style + ele.absolute
             },
-            transformacao: ele.transform
+            transformacao: this.tratarTransform(ele.transform)
           })
         }
       })
       return modelo
+    },
+    tratarTransform (transform) {
+      if (transform.translate) {
+        transform.translate = this.tratarTranslate(transform.translate)
+      }
+      if (transform.rotate) {
+        transform.rotate = this.tratarOutrosTransform(transform.rotate)
+      }
+      if (transform.scale) {
+        transform.scale = this.tratarOutrosTransform(transform.scale)
+      }
+      return transform
+    },
+    tratarTranslate (translate) {
+      const fontSize = fontSizeAtual()
+      const strings = translate.split(',')
+      const quintoIndex = strings[5].split(')')
+      const direitaQuintoIndex = quintoIndex[1].split('(')
+      const sextoIndex = [strings[6][0], strings[6].substring(1, 3), 'em)']
+      strings[4] = String(Number(strings[4]) / fontSize)
+      quintoIndex[0] = String(Number(quintoIndex[0]) / fontSize)
+      direitaQuintoIndex[1] = converterPxToEm(direitaQuintoIndex[1])
+      sextoIndex[1] = String(Number(sextoIndex[1]) / fontSize)
+      quintoIndex[1] = direitaQuintoIndex
+      strings[5] = quintoIndex
+      strings[6] = sextoIndex
+      let stringFinal = strings[0] + ',' + strings[1] + ',' + strings[2] + ',' + strings[3] + ',' + strings[4] + ','
+      stringFinal += quintoIndex[0] + ')' + quintoIndex[1][0] + '(' + quintoIndex[1][1] + ','
+      stringFinal += sextoIndex[0] + sextoIndex[1] + sextoIndex[2]
+      return stringFinal
+    },
+    tratarOutrosTransform (outro) {
+      const fontSize = fontSizeAtual()
+      const strings = outro.split(',')
+      const quintoIndex = strings[5].split(')')
+      strings[4] = String(Number(strings[4]) / fontSize)
+      quintoIndex[0] = String(Number(quintoIndex[0]) / fontSize)
+      let stringFinal = strings[0] + ',' + strings[1] + ',' + strings[2] + ',' + strings[3] + ',' + strings[4] + ','
+      stringFinal += quintoIndex[0] + ')' + quintoIndex[1] + ')'
+      return stringFinal
     }
   }
 }
