@@ -1,14 +1,14 @@
 <template>
   <div class="q-gutter-y-md">
     <q-card class="q-mx-md" >
-      <q-section class="row justify-between q-pa-md">
+      <q-card-section class="row justify-between q-pa-md">
         <div class="text-h5 colorPrimary" >
           Olá {{usuario.nome}}
         </div>
         <div>
           <q-btn icon="fa fa-plus" label="Adicionar Modelo" color="primary" :to="{ name: 'criarModelo' }" />
         </div>
-      </q-section>
+      </q-card-section>
     </q-card>
     <listagem-com-filtro titulo="Modelos" :inputs="inputs"
       :cancelButton="cancelButton" :submitButton="submitButton"
