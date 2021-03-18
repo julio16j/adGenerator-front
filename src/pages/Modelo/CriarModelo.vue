@@ -228,7 +228,7 @@ export default {
       const strings = translate.split(',')
       const quintoIndex = strings[5].split(')')
       const direitaQuintoIndex = quintoIndex[1].split('(')
-      const sextoIndex = [strings[6][0], strings[6].substring(1, 3), 'em)']
+      const sextoIndex = [strings[6][0], strings[6].replace(' ', '').replace('px)', ''), 'em)']
       strings[4] = String(Number(strings[4]) / fontSize)
       quintoIndex[0] = String(Number(quintoIndex[0]) / fontSize)
       direitaQuintoIndex[1] = converterPxToEm(direitaQuintoIndex[1])
