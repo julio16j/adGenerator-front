@@ -24,23 +24,23 @@
           class="no-shadow q-pa-none" row-key="chave"
           hide-pagination grid >
           <template v-slot:item="item">
-            <q-card style="width: 400px; height: 400px" class="q-ma-md" >
-              <div class="flex flex-center" :style="getProdutoStyle(item.row.modelo.imagem)" >
+            <q-card style="width: 25em; height: 25em" class="q-ma-md" >
+              <div class="flex flex-center" :style="getElementoStyle(item.row.modelo.imagem)" >
                 <q-img
                   :src="urlImagem(item.row.produto.caminhoImagem)"
                   spinner-color="white"
                   style="height: 100%"
                 />
               </div>
-              <div class="flex flex-center" :style="getTituloDescricaoStyle(item.row.modelo.titulo, 'titulo')" >
+              <div class="flex flex-center" :style="getElementoStyle(item.row.modelo.titulo)" >
                 {{ item.row.titulo.descricao }}
               </div>
               <div class="flex flex-center" v-for="(descricao, index) in item.row.modelo.descricoes"
-                :key="descricao.transformacao.translate" :style="getTituloDescricaoStyle(descricao, 'descricao')" >
+                :key="descricao.transformacao" :style="getElementoStyle(descricao)" >
                 {{ item.row.descricoes[index].descricao }}
               </div>
               <div class="flex flex-center" v-for="(cartao, index) in item.row.modelo.cartoes"
-                :key="cartao.transformacao.translate" :style="getCartaoStyle(cartao)" >
+                :key="cartao.transformacao" :style="getElementoStyle(cartao)" >
                 <q-img
                   :src="urlImagem(item.row.cartoes[index].caminhoImagem)"
                   spinner-color="white"
@@ -69,7 +69,7 @@ import SimpleForm from '@/components/SimpleForm'
 import VariacaoService from '@/services/variacaoService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
 import StorageService from '@/services/storageService.js'
-import { capitalCase } from '@/utils'
+import { getFontSize } from '@/utils'
 
 export default {
   components: {
@@ -162,34 +162,20 @@ export default {
       this.pagination.page = novoValor
       this.listarVariacao(this.filtroVariacao)
     },
-    getProdutoStyle (produtoSetup) {
-      const transformacao = produtoSetup.transformacao
-      let produtoStyle = 'color: white; width: 200px; height: 200px; background-color: #333333;'
-      produtoStyle += this.transformarElemento(produtoSetup, transformacao, 'elementoImagem')
-      return produtoStyle
+    getElementoStyle (elemento) {
+      const transformacao = elemento.transformacao
+      let elementoStyle = elemento.estiloInicial
+      elementoStyle += 'transform:' + this.tratarTransform(transformacao)
+      return elementoStyle
     },
-    getTituloDescricaoStyle (setup, tituloOuDescricao) {
-      const transformacao = setup.transformacao
-      let descricaoStyle = 'min-width: 60px; font-size: 12px; color: ;'
-      const elementoTituloDescricao = 'elemento' + capitalCase(tituloOuDescricao)
-      descricaoStyle += this.transformarElemento(setup, transformacao, elementoTituloDescricao)
-      return descricaoStyle
-    },
-    getCartaoStyle (cartaoSetup) {
-      const transformacao = cartaoSetup.transformacao
-      let cartaoStyle = 'width: 60px; height: 40px; font-size: 12px; color: white;background-color: #333333;'
-      cartaoStyle += this.transformarElemento(cartaoSetup, transformacao, 'elementoCartao')
-      return cartaoStyle
-    },
-    transformarElemento (setup, transformacao, elemento) {
-      let style = setup[elemento].estiloInicial + ' ;transform: '
-      if (transformacao === null) {
-        transformacao = this.transformacao
-      }
-      style += transformacao.translate == null ? '' : transformacao.translate + ' '
-      style += transformacao.rotate == null ? '' : transformacao.rotate + ' '
-      style += transformacao.scale == null ? '' : transformacao.scale
-      return style
+    tratarTransform (transformacao) {
+      if (!transformacao) return
+      const fontSize = getFontSize()
+      const [matrix, direita] = transformacao.split(') ')
+      const matrixSplit = matrix.split(',')
+      matrixSplit[4] = matrixSplit[4] * fontSize
+      matrixSplit[5] = matrixSplit[5] * fontSize
+      return matrixSplit.join(',') + ') ' + direita
     },
     urlImagem (fileName) {
       return StorageService.downloadUrl(fileName)
