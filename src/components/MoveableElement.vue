@@ -103,15 +103,15 @@ export default {
   }),
   methods: {
     handleDrag ({ target, transform }) {
-      this.$emit('transform', { id: this.element.id, transform, tipo: 'translate' })
+      this.$emit('transform', { id: this.element.id, transform })
       target.style.transform = transform
     },
     handleScale ({ target, transform }) {
-      this.$emit('transform', { id: this.element.id, transform, tipo: 'scale' })
+      this.$emit('transform', { id: this.element.id, transform })
       target.style.transform = transform
     },
     handleRotate ({ target, transform }) {
-      this.$emit('transform', { id: this.element.id, transform, tipo: 'rotate' })
+      this.$emit('transform', { id: this.element.id, transform })
       target.style.transform = transform
     },
     desligaFoco () {

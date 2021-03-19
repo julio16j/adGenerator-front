@@ -57,7 +57,7 @@ import TipoElemento from '@/classes/enums/TipoElemento'
 import Mensagens from '@/classes/enums/Mensagens'
 import ModeloService from '@/services/modeloService.js'
 import notificacaoMixin from '@/mixins/notificacaoMixin'
-import { fontSizeAtual, converterPxToEm } from '@/utils'
+import { getFontSize, converterPxToEm } from '@/utils'
 export default {
   name: 'CriarModelo',
   mixins: [notificacaoMixin],
@@ -90,10 +90,10 @@ export default {
           id: this.elementsSequence,
           tipo: TipoElemento.Titulo,
           value: 'Titulo',
-          absolute: 'position: absolute; right: 200px; z-index:1;',
+          absolute: 'position: absolute; right: 3em; z-index:1;',
           style: 'font-size: 1em; color: black;',
           foco: true,
-          transform: {}
+          transform: null
         })
         this.elementsSequence++
       }
@@ -102,11 +102,11 @@ export default {
       this.elements.push({
         id: this.elementsSequence,
         tipo: TipoElemento.Descricao,
-        absolute: 'position: absolute; bottom: 200px;z-index:1;',
+        absolute: 'position: absolute; bottom: 1emx;z-index:1;',
         style: 'color: black;',
         value: 'Descrição',
         foco: true,
-        transform: {}
+        transform: null
       })
       this.elementsSequence++
     },
@@ -114,11 +114,11 @@ export default {
       this.elements.push({
         id: this.elementsSequence,
         tipo: TipoElemento.cartao,
-        absolute: 'position: absolute; top: 0; right: 20px;',
-        style: 'color: white; height: 2.5em;',
+        absolute: 'position: absolute; top: 0; right: 1em;',
+        style: 'color: white; height: 2.5em; width: 4em;',
         value: 'Cartão',
         foco: true,
-        transform: {}
+        transform: null
       })
       this.elementsSequence++
     },
@@ -130,11 +130,10 @@ export default {
           absolute: 'position: absolute; top: 0;',
           style: 'color: white; width: 12.5em; height: 12.5em;',
           foco: true,
-          transform: {}
+          transform: null
         })
         this.elementsSequence++
       }
-      console.log(window.innerWidth)
     },
     desligaFoco () {
       this.elements = this.elements.map(element => {
@@ -145,10 +144,10 @@ export default {
     excluirElemento (id) {
       this.elements = this.elements.filter(element => element.id !== id)
     },
-    tranformarElemento ({ id, transform, tipo }) {
+    tranformarElemento ({ id, transform }) {
       this.elements = this.elements.map(ele => {
         if (ele.id === id) {
-          ele.transform[tipo] = transform
+          ele.transform = transform
         }
         return ele
       })
@@ -160,8 +159,7 @@ export default {
       this.abreNomeDialog = true
     },
     salvar () {
-      const modeloMontado = this.montarModelo()
-      ModeloService.cadastrar(modeloMontado)
+      ModeloService.cadastrar(this.montarModelo())
         .then(response => {
           if (response.status === 200) {
             this.notificacaoSucesso(Mensagens.OperacaoExecutada)
@@ -177,34 +175,22 @@ export default {
       this.elements.map(ele => {
         if (ele.tipo === TipoElemento.Imagem) {
           modelo.imagem = {
-            elementoImagem: {
-              value: 'imagem',
-              estiloInicial: ele.style + ele.absolute
-            },
+            estiloInicial: ele.style + ele.absolute,
             transformacao: this.tratarTransform(ele.transform)
           }
         } else if (ele.tipo === TipoElemento.Titulo) {
           modelo.titulo = {
-            elementoTitulo: {
-              value: ele.value,
-              estiloInicial: ele.style + ele.absolute
-            },
+            estiloInicial: ele.style + ele.absolute,
             transformacao: this.tratarTransform(ele.transform)
           }
         } else if (ele.tipo === TipoElemento.Descricao) {
           modelo.descricoes.push({
-            elementoDescricao: {
-              value: ele.value,
-              estiloInicial: ele.style + ele.absolute
-            },
+            estiloInicial: ele.style + ele.absolute,
             transformacao: this.tratarTransform(ele.transform)
           })
         } else {
           modelo.cartoes.push({
-            elementoCartao: {
-              value: ele.value,
-              estiloInicial: ele.style + ele.absolute
-            },
+            estiloInicial: ele.style + ele.absolute,
             transformacao: this.tratarTransform(ele.transform)
           })
         }
@@ -212,44 +198,26 @@ export default {
       return modelo
     },
     tratarTransform (transform) {
-      if (transform.translate) {
-        transform.translate = this.tratarTranslate(transform.translate)
-      }
-      if (transform.rotate) {
-        transform.rotate = this.tratarOutrosTransform(transform.rotate)
-      }
-      if (transform.scale) {
-        transform.scale = this.tratarOutrosTransform(transform.scale)
-      }
-      return transform
+      if (!transform) return transform
+      const transformSplit = transform.split(') ')
+      const matrix = this.tratarMatrix(transformSplit[0])
+      const transformDireita = this.tratarDireita(transformSplit[1])
+      return matrix + ') ' + transformDireita
     },
-    tratarTranslate (translate) {
-      const fontSize = fontSizeAtual()
-      const strings = translate.split(',')
-      const quintoIndex = strings[5].split(')')
-      const direitaQuintoIndex = quintoIndex[1].split('(')
-      const sextoIndex = [strings[6][0], strings[6].replace(' ', '').replace('px)', ''), 'em)']
-      strings[4] = String(Number(strings[4]) / fontSize)
-      quintoIndex[0] = String(Number(quintoIndex[0]) / fontSize)
-      direitaQuintoIndex[1] = converterPxToEm(direitaQuintoIndex[1])
-      sextoIndex[1] = String(Number(sextoIndex[1]) / fontSize)
-      quintoIndex[1] = direitaQuintoIndex
-      strings[5] = quintoIndex
-      strings[6] = sextoIndex
-      let stringFinal = strings[0] + ',' + strings[1] + ',' + strings[2] + ',' + strings[3] + ',' + strings[4] + ','
-      stringFinal += quintoIndex[0] + ')' + quintoIndex[1][0] + '(' + quintoIndex[1][1] + ','
-      stringFinal += sextoIndex[0] + sextoIndex[1] + sextoIndex[2]
-      return stringFinal
+    tratarMatrix (matrix) {
+      const fontSize = getFontSize()
+      const matrixSplit = matrix.split(',')
+      matrixSplit[4] = String(Number(matrixSplit[4] / fontSize))
+      matrixSplit[5] = String(Number(matrixSplit[5] / fontSize))
+      return matrixSplit.join(',')
     },
-    tratarOutrosTransform (outro) {
-      const fontSize = fontSizeAtual()
-      const strings = outro.split(',')
-      const quintoIndex = strings[5].split(')')
-      strings[4] = String(Number(strings[4]) / fontSize)
-      quintoIndex[0] = String(Number(quintoIndex[0]) / fontSize)
-      let stringFinal = strings[0] + ',' + strings[1] + ',' + strings[2] + ',' + strings[3] + ',' + strings[4] + ','
-      stringFinal += quintoIndex[0] + ')' + quintoIndex[1] + ')'
-      return stringFinal
+    tratarDireita (direita) {
+      if (!direita.includes('translate')) return direita
+      const direitaSplit = direita.split(', ')
+      direitaSplit[0] = direitaSplit[0].split('(')
+      direitaSplit[0][1] = converterPxToEm(direitaSplit[0][1])
+      direitaSplit[1] = converterPxToEm(direitaSplit[1].replace(')', '')) + ')'
+      return direitaSplit[0].join('(') + ',' + direitaSplit[1]
     }
   }
 }
