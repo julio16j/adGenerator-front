@@ -217,7 +217,7 @@ export default {
       direitaSplit[0] = direitaSplit[0].split('(')
       direitaSplit[0][1] = converterPxToEm(direitaSplit[0][1])
       direitaSplit[1] = converterPxToEm(direitaSplit[1].replace(')', '')) + ')'
-      return direitaSplit[0].join('(') + ',' + direitaSplit[1]
+      return direitaSplit[0].join('(') + ', ' + direitaSplit[1]
     }
   }
 }
