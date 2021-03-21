@@ -24,7 +24,8 @@
           class="no-shadow q-pa-none" row-key="chave"
           hide-pagination grid >
           <template v-slot:item="item">
-            <q-card style="width: 25em; height: 25em" class="q-ma-md" >
+            <q-card :style="'width: 25em; height: 25em;background-color:' + item.row.temaCor.corFundo "
+              class="q-ma-md" >
               <expansion-menu :itens="itemsMenu" @menuClick="(evento) => executarClique(evento, item.row)" />
               <div class="flex flex-center" :style="getElementoStyle(item.row.modelo.imagem)" >
                 <q-img
@@ -34,11 +35,15 @@
                 />
               </div>
               <div class="flex flex-center" :style="getElementoStyle(item.row.modelo.titulo)" >
-                {{ item.row.titulo.descricao }}
+                <span :style="'color:' + item.row.temaCor.corFonte" >
+                  {{ item.row.titulo.descricao }}
+                </span>
               </div>
               <div class="flex flex-center" v-for="(descricao, index) in item.row.modelo.descricoes"
                 :key="descricao.transformacao" :style="getElementoStyle(descricao)" >
-                {{ item.row.descricoes[index].descricao }}
+                <span :style="'color:' + item.row.temaCor.corFonte" >
+                  {{ item.row.descricoes[index].descricao }}
+                </span>
               </div>
               <div class="flex flex-center" v-for="(cartao, index) in item.row.modelo.cartoes"
                 :key="cartao.transformacao" :style="getElementoStyle(cartao)" >
