@@ -8,7 +8,7 @@
         @drag="handleDrag"
         @scale="handleScale"
         @rotate="handleRotate"
-        style="width: 12.5em; height: 12.5em"
+        :style="`width: 12.5em; height: 12.5em; transform: ${element.transform}`"
       >
         <div class="relative-position">
           <q-btn v-show="element.foco" padding="none" flat
@@ -30,7 +30,7 @@
         @drag="handleDrag"
         @scale="handleScale"
         @rotate="handleRotate"
-        style="width: 3.75em"
+        :style="`width: 3.75em; transform: ${element.transform}`"
       >
         <div class="relative-position">
           <q-btn v-show="element.foco" padding="none" flat
@@ -52,7 +52,7 @@
         @drag="handleDrag"
         @scale="handleScale"
         @rotate="handleRotate"
-        style="width: 3.75em; height: 2.5em"
+        :style="`width: 3.75em; height: 2.5em; transform: ${element.transform}`"
       >
         <div class="relative-position">
           <q-btn v-show="element.foco" padding="none" flat

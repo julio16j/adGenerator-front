@@ -16,7 +16,7 @@
             @click.self="desligaFoco" >
             <moveable-element @focou="()=>{element.foco = true}"
               @excluirElemento="excluirElemento"
-              @transform="tranformarElemento"
+              @transform="transformarElemento"
               v-for="element in elements" :key="element.id"
               :element="element" :foco="element.foco"
               :style="element.absolute"
@@ -57,7 +57,7 @@ import TipoElemento from '@/classes/enums/TipoElemento'
 import Mensagens from '@/classes/enums/Mensagens'
 import ModeloService from '@/services/modeloService.js'
 import notificacaoMixin from '@/mixins/notificacaoMixin'
-import { getFontSize, converterPxToEm } from '@/utils'
+import { getFontSize, converterPxToEm, converterEmToPx } from '@/utils'
 export default {
   name: 'CriarModelo',
   mixins: [notificacaoMixin],
@@ -86,8 +86,38 @@ export default {
     getModelo (modeloId) {
       ModeloService.getById(modeloId)
         .then(response => {
-          console.log(response.data)
+          Object.keys(response.data).forEach(key => {
+            this.addElement(key, response.data[key])
+          })
+          // const { imagem } = response.data
+          // const { style, absolute, transformacao } = this.getElementoStyle(imagem)
+          // this.addImage({ absolute, style, transformacao })
         })
+    },
+    getElementoStyle (elemento) {
+      const transformacao = this.getTransform(elemento.transformacao)
+      const elementoStyle = elemento.estiloInicial
+      let [style, absolute] = elementoStyle.split('position')
+      absolute = absolute.replace(':', 'position:')
+      return ({ style, absolute, transformacao })
+    },
+    getTransform (transformacao) {
+      const fontSize = getFontSize()
+      const [matrix, translate] = transformacao.split(')')
+      let matrixSplit = matrix.split(',')
+      matrixSplit[4] = String(Number(matrixSplit[4] * fontSize))
+      matrixSplit[5] = String(Number(matrixSplit[5] * fontSize))
+      matrixSplit = matrixSplit.join(',') + ')'
+
+      if (!translate.includes('translate')) return matrixSplit + ' ' + translate
+      let translateSplit = translate.split(',')
+      translateSplit[0] = translateSplit[0].split('(')
+      translateSplit[0][1] = converterEmToPx(translateSplit[0][1])
+      translateSplit[0] = translateSplit[0].join('(')
+      translateSplit[1] = converterEmToPx(translateSplit[1])
+      translateSplit = translateSplit.join(', ') + ')'
+
+      return matrixSplit + ' ' + translateSplit
     },
     temElementosByTipo (tipo) {
       const listaElementosByTipo = this.elements.filter((element, index) => {
@@ -98,53 +128,70 @@ export default {
       })
       return listaElementosByTipo.length > 0
     },
-    addTitle () {
+    addElement (tipo, elemento) {
+      if (tipo === 'nome') {
+        this.modelo.nome = elemento
+      } else if (Array.isArray(elemento)) {
+        elemento.forEach(ele => {
+          const { style, absolute, transformacao } = this.getElementoStyle(ele)
+
+          if (tipo === 'cartoes') this.addCartao({ absolute, style, transformacao })
+          else if (tipo === 'descricoes') this.addDescricao({ absolute, style, transformacao })
+        })
+      } else {
+        const { style, absolute, transformacao } = this.getElementoStyle(elemento)
+
+        if (tipo === 'imagem') this.addImage({ absolute, style, transformacao })
+        else if (tipo === 'titulo') this.addTitle({ absolute, style, transformacao })
+      }
+    },
+    addTitle ({ absolute, style, transformacao }) {
       if (!this.temElementosByTipo(TipoElemento.Titulo)) {
         this.elements.push({
           id: this.elementsSequence,
           tipo: TipoElemento.Titulo,
           value: 'Titulo',
-          absolute: 'position: absolute; right: 3em; z-index:1;',
-          style: 'font-size: 1em; color: black;',
+          absolute: absolute || 'position: absolute; right: 3em; z-index:1;',
+          style: style || 'font-size: 1em; color: black;',
           foco: true,
-          transform: null
+          transform: transformacao
         })
         this.elementsSequence++
       }
     },
-    addDescricao () {
+    addDescricao ({ absolute, style, transformacao }) {
       this.elements.push({
         id: this.elementsSequence,
         tipo: TipoElemento.Descricao,
-        absolute: 'position: absolute; bottom: 1emx;z-index:1;',
-        style: 'color: black;',
+        absolute: absolute || 'position: absolute; bottom: 1emx;z-index:1;',
+        style: style || 'color: black;',
         value: 'Descrição',
         foco: true,
-        transform: null
+        transform: transformacao
       })
       this.elementsSequence++
     },
-    addCartao () {
+    addCartao ({ absolute, style, transformacao }) {
       this.elements.push({
         id: this.elementsSequence,
         tipo: TipoElemento.cartao,
-        absolute: 'position: absolute; top: 0; right: 1em;',
-        style: 'color: white; height: 2.5em; width: 4em;',
+        absolute: absolute || 'position: absolute; top: 0; right: 1em;',
+        style: style || 'color: white; height: 2.5em; width: 4em;',
         value: 'Cartão',
         foco: true,
-        transform: null
+        transform: transformacao
       })
       this.elementsSequence++
     },
-    addImage () {
+    addImage ({ absolute, style, transformacao }) {
       if (!this.temElementosByTipo(TipoElemento.Imagem)) {
         this.elements.push({
           id: this.elementsSequence,
           tipo: TipoElemento.Imagem,
-          absolute: 'position: absolute; top: 0;',
-          style: 'color: white; width: 12.5em; height: 12.5em;',
+          absolute: absolute || 'position: absolute; top: 0;',
+          style: style || 'color: white; width: 12.5em; height: 12.5em;',
           foco: true,
-          transform: null
+          transform: transformacao
         })
         this.elementsSequence++
       }
@@ -158,7 +205,7 @@ export default {
     excluirElemento (id) {
       this.elements = this.elements.filter(element => element.id !== id)
     },
-    tranformarElemento ({ id, transform }) {
+    transformarElemento ({ id, transform }) {
       this.elements = this.elements.map(ele => {
         if (ele.id === id) {
           ele.transform = transform
@@ -173,16 +220,29 @@ export default {
       this.abreNomeDialog = true
     },
     salvar () {
-      ModeloService.cadastrar(this.montarModelo())
-        .then(response => {
-          if (response.status === 200) {
-            this.notificacaoSucesso(Mensagens.OperacaoExecutada)
-            this.$router.back()
-          }
-        }).catch(error => {
-          this.notificacaoErro(error.data + '')
-        })
-      this.abreNomeDialog = false
+      if (this.contexto === 'cadastro') {
+        ModeloService.cadastrar(this.montarModelo())
+          .then(response => {
+            if (response.status === 200) {
+              this.notificacaoSucesso(Mensagens.OperacaoExecutada)
+              this.$router.back()
+            }
+          }).catch(error => {
+            this.notificacaoErro(error.data + '')
+          })
+        this.abreNomeDialog = false
+      } else {
+        ModeloService.editar(this.montarModelo())
+          .then(response => {
+            if (response.status === 200) {
+              this.notificacaoSucesso(Mensagens.OperacaoExecutada)
+              this.$router.back()
+            }
+          }).catch(error => {
+            this.notificacaoErro(error.data + '')
+          })
+        this.abreNomeDialog = false
+      }
     },
     montarModelo () {
       const modelo = { ...this.modelo }
@@ -211,11 +271,12 @@ export default {
       })
       return modelo
     },
-    tratarTransform (transform) {
+    tratarTransform (transform, isEditar) {
       if (!transform) return transform
       const transformSplit = transform.split(') ')
       const matrix = this.tratarMatrix(transformSplit[0])
       const transformDireita = this.tratarDireita(transformSplit[1])
+      if (isEditar) return matrix + ') ' + transformSplit[1]
       return matrix + ') ' + transformDireita
     },
     tratarMatrix (matrix) {
@@ -231,7 +292,7 @@ export default {
       direitaSplit[0] = direitaSplit[0].split('(')
       direitaSplit[0][1] = converterPxToEm(direitaSplit[0][1])
       direitaSplit[1] = converterPxToEm(direitaSplit[1].replace(')', '')) + ')'
-      return direitaSplit[0].join('(') + ',' + direitaSplit[1]
+      return direitaSplit[0].join('(') + ', ' + direitaSplit[1]
     }
   }
 }
