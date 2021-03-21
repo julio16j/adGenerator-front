@@ -25,6 +25,24 @@
           hide-pagination grid >
           <template v-slot:item="item">
             <q-card style="width: 25em; height: 25em" class="q-ma-md" >
+              <div style="position: absolute; right: 0">
+                <q-btn flat>
+                  <q-icon name="fas fa-ellipsis-v" style="font-size: 1em;" color="grey" />
+                  <q-menu cover anchor="bottom right" auto-close
+                    transition-show="scale" transition-hide="scale">
+                    <q-list>
+                      <q-item clickable @click="excluirVariacao(item.row.chave)">
+                        <q-item-section avatar>
+                          <q-icon size="sm" color="red" name="far fa-trash-alt" />
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>Excluir</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-menu>
+                </q-btn>
+              </div>
               <div class="flex flex-center" :style="getElementoStyle(item.row.modelo.imagem)" >
                 <q-img
                   :src="urlImagem(item.row.produto.caminhoImagem)"
@@ -69,6 +87,7 @@ import SimpleForm from '@/components/SimpleForm'
 import VariacaoService from '@/services/variacaoService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
 import StorageService from '@/services/storageService.js'
+import Mensagens from '@/classes/enums/Mensagens'
 import { getFontSize } from '@/utils'
 
 export default {
@@ -154,9 +173,12 @@ export default {
           this.notificacaoErro(error.message)
         })
     },
-    excluirVariacao (produtoId) {
-      VariacaoService.deleteById(produtoId)
-        .then(this.listarVariacao)
+    excluirVariacao (chave) {
+      VariacaoService.deleteById(chave)
+        .then(() => {
+          this.listarVariacao(this.filtroVariacao)
+          this.notificacaoSucesso(Mensagens.OperacaoExecutada)
+        })
     },
     atualizarPaginacao (novoValor) {
       this.pagination.page = novoValor
