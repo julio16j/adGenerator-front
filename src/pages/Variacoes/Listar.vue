@@ -25,29 +25,12 @@
           hide-pagination grid >
           <template v-slot:item="item">
             <q-card style="width: 25em; height: 25em" class="q-ma-md" >
-              <div style="position: absolute; right: 0">
-                <q-btn flat>
-                  <q-icon name="fas fa-ellipsis-v" style="font-size: 1em;" color="grey" />
-                  <q-menu cover anchor="bottom right" auto-close
-                    transition-show="scale" transition-hide="scale">
-                    <q-list>
-                      <q-item clickable @click="excluirVariacao(item.row.chave)">
-                        <q-item-section avatar>
-                          <q-icon size="sm" color="red" name="far fa-trash-alt" />
-                        </q-item-section>
-                        <q-item-section>
-                          <q-item-label>Excluir</q-item-label>
-                        </q-item-section>
-                      </q-item>
-                    </q-list>
-                  </q-menu>
-                </q-btn>
-              </div>
+              <expansion-menu :itens="itemsMenu" @menuClick="(evento) => executarClique(evento, item.row)" />
               <div class="flex flex-center" :style="getElementoStyle(item.row.modelo.imagem)" >
                 <q-img
                   :src="urlImagem(item.row.produto.caminhoImagem)"
                   spinner-color="white"
-                  style="height: 100%"
+                  :style="'height: 100%;' + getInvertidaStyle(item.row.invertida)"
                 />
               </div>
               <div class="flex flex-center" :style="getElementoStyle(item.row.modelo.titulo)" >
@@ -84,6 +67,7 @@
 
 <script>
 import SimpleForm from '@/components/SimpleForm'
+import ExpansionMenu from '@/components/ExpansionMenu'
 import VariacaoService from '@/services/variacaoService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
 import StorageService from '@/services/storageService.js'
@@ -92,7 +76,8 @@ import { getFontSize } from '@/utils'
 
 export default {
   components: {
-    SimpleForm
+    SimpleForm,
+    ExpansionMenu
   },
   props: {
     contexto: { type: String, default: 'listar' }
@@ -112,6 +97,13 @@ export default {
         { label: 'Produto', value: null, nome: 'produtoId' },
         { label: 'Título', value: null, nome: 'tituloId' }
       ],
+      itemsMenu: [
+        {
+          icon: { name: 'far fa-trash-alt', color: 'red' },
+          label: 'Excluir',
+          click: (variacao) => this.excluirVariacao(variacao.chave)
+        }
+      ],
       filtroVariacao: {
         modeloId: null,
         produtoId: null,
@@ -123,9 +115,6 @@ export default {
         { name: 'produto', label: 'Produto', field: row => row.produto.nome, align: 'center' },
         { name: 'titulo', label: 'Titulo', field: row => row.titulo.descricao, align: 'center' }
       ],
-      cancelButton: {
-        click: this.voltar
-      },
       submitButton: {
         submit: this.listarVariacao
       },
@@ -134,12 +123,6 @@ export default {
         rotate: null,
         scale: null,
         translate: null
-      },
-      excluirBtn: {
-        mostraBotao: true,
-        excluir: (linha) => {
-          this.excluirVariacao(linha.nome)
-        }
       },
       cadastrarBtn: {
         mostraBotao: true,
@@ -184,6 +167,10 @@ export default {
       this.pagination.page = novoValor
       this.listarVariacao(this.filtroVariacao)
     },
+    getInvertidaStyle (booleano) {
+      if (booleano) return 'transform: scaleX(-1);'
+      return ''
+    },
     getElementoStyle (elemento) {
       const transformacao = elemento.transformacao
       let elementoStyle = elemento.estiloInicial
@@ -201,6 +188,9 @@ export default {
     },
     urlImagem (fileName) {
       return StorageService.downloadUrl(fileName)
+    },
+    executarClique ({ menuItem, index }, variacao) {
+      menuItem.click(variacao)
     }
   }
 }
