@@ -71,14 +71,24 @@
             </q-item>
           </div>
         </q-expansion-item>
-        <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fas fa-ad" label="Variações" caption="">
+        <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fas fa-ad" label="Variações E Modelos" caption="">
           <div class="itemMenu">
             <q-item clickable tag="a" v-ripple :to="{name: 'variacoesListar'}">
               <q-item-section avatar>
                 <q-icon fa fa-dollar-sign name="fa fa-list" />
               </q-item-section>
               <q-item-section>
-                <q-item-label>Listar</q-item-label>
+                <q-item-label>Variações</q-item-label>
+              </q-item-section>
+            </q-item>
+          </div>
+          <div class="itemMenu">
+            <q-item clickable tag="a" v-ripple :to="{name: 'modeloListar'}">
+              <q-item-section avatar>
+                <q-icon fa fa-dollar-sign name="fa fa-list" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>Modelos</q-item-label>
               </q-item-section>
             </q-item>
           </div>

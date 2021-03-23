@@ -2,6 +2,7 @@ import Home from '@/pages/Index'
 import Cadastra from '@/pages/Cadastra'
 import Dashboard from '@/pages/Dashboard'
 import CriarModelo from '@/pages/Modelo/CriarModelo'
+import ModeloListar from '@/pages/Modelo/Listar'
 import DescricaoCadastro from '@/pages/DadosBasicos/Descricao/Cadastro'
 import DescricaoListar from '@/pages/DadosBasicos/Descricao/Listar'
 import CartaoListar from '@/pages/DadosBasicos/Cartao/Listar'
@@ -26,7 +27,8 @@ const routes = [
         path: 'modelo',
         component: Router,
         children: [
-          { path: 'adicionar', component: CriarModelo, name: 'criarModelo' }
+          { path: 'adicionar', component: CriarModelo, name: 'criarModelo' },
+          { path: 'listar', component: ModeloListar, name: 'modeloListar' }
         ]
       },
       {
