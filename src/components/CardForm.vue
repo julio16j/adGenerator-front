@@ -5,12 +5,12 @@
       <div :class="subTituloStyle">{{ subTitulo }}</div>
 
       <q-form @submit="onSubmit" style="display: flex; justify-content: center" >
-        <div style="width: 80%">
-          <div class="row q-gutter-x-md">
+        <div>
+          <div class="row q-gutter-x-md justify-center">
             <div v-for="input in inputs"
               :key="input.nome"
               v-bind:class="{
-                'col': input.type !== 'file',
+                'col-4': input.type !== 'file',
                 'col-12': input.type === 'file'
               }"
             >
@@ -22,6 +22,7 @@
                 :clearable="true && !input.clearable"
                 :rules="input.rules || [ val => val && val.length > 0 || '']"
                 :readonly="input.readonly || false"
+                :mask="input.mask || ''"
               />
 
               <div v-else-if="input.type === 'file'">
@@ -105,8 +106,7 @@ export default {
       required: true
     },
     cardStyle: {
-      type: String,
-      default: 'width: 500px;'
+      type: String
     },
     cardClass: {
       type: String,

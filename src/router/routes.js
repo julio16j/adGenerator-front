@@ -12,6 +12,8 @@ import TituloCadastro from '@/pages/DadosBasicos/Titulo/Cadastro'
 import ProdutoListar from '@/pages/DadosBasicos/Produto/Listar'
 import ProdutoCadastro from '@/pages/DadosBasicos/Produto/Cadastro'
 import VariacoesListar from '@/pages/Variacoes/Listar'
+import DivulgadorListar from '@/pages/Divulgador/Listar'
+import DivulgadorCadastrar from '@/pages/Divulgador/Cadastrar'
 
 import Router from '../layouts/Router'
 
@@ -33,6 +35,20 @@ const routes = [
             path: 'editar/:modeloId',
             component: CriarModelo,
             name: 'editarModelo',
+            props: { contexto: 'editar' }
+          }
+        ]
+      },
+      {
+        path: 'divulgador',
+        component: Router,
+        children: [
+          { path: 'cadastro', component: DivulgadorCadastrar, name: 'divulgadorCadastrar' },
+          { path: 'listar', component: DivulgadorListar, name: 'divulgadorListar' },
+          {
+            path: 'editar/:divulgadorId',
+            component: DivulgadorCadastrar,
+            name: 'divulgadorEditar',
             props: { contexto: 'editar' }
           }
         ]
