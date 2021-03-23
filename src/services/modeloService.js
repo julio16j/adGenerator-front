@@ -5,6 +5,7 @@ const URL = {
   listar: () => `${URL.base}/`,
   pesquisar: () => `${URL.base}/filtrar`,
   cadastrar: () => `${URL.base}`,
+  editar: () => `${URL.base}`,
   getById: (id) => `${URL.base}/${id}`,
   deleteById: (modeloId) => `${URL.base}/${modeloId}`
 }
@@ -14,6 +15,9 @@ export default {
   },
   cadastrar (modelo) {
     return api.post(URL.cadastrar(), modelo)
+  },
+  editar (modelo) {
+    return api.put(URL.editar(), modelo)
   },
   getById (modeloId) {
     return api.get(URL.getById(modeloId))

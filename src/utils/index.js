@@ -17,3 +17,9 @@ export function converterPxToEm (stringPx) {
   const intPx = Number(stringPx.replace('px', ''))
   return intPx / fontSizeAtual + 'em'
 }
+
+export function converterEmToPx (stringEm) {
+  const fontSizeAtual = getFontSize()
+  const intEm = Number(stringEm.replace('em', ''))
+  return intEm * fontSizeAtual + 'px'
+}
