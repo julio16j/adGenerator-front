@@ -35,76 +35,78 @@
           :key="link.title"
           v-bind="link"
         />
-        <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fa fa-exchange-alt" label="Cadastros Básicos" caption="">
-          <div class="itemMenu">
-            <q-item clickable tag="a" v-ripple :to="{name: 'descricaoListar'}">
-              <q-item-section avatar>
-                <q-icon fa fa-dollar-sign name="fa fa-list" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Descrição</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item clickable tag="a" v-ripple :to="{name: 'cartaoListar'}">
-              <q-item-section avatar>
-                <q-icon fa fa-dollar-sign name="fa fa-list" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Cartão</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item clickable tag="a" v-ripple :to="{name: 'produtoListar'}">
-              <q-item-section avatar>
-                <q-icon fa fa-dollar-sign name="fa fa-list" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Produto</q-item-label>
-              </q-item-section>
-            </q-item>
-            <q-item clickable tag="a" v-ripple :to="{name: 'tituloListar'}">
-              <q-item-section avatar>
-                <q-icon fa fa-dollar-sign name="fa fa-list" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Título</q-item-label>
-              </q-item-section>
-            </q-item>
-          </div>
-        </q-expansion-item>
-        <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fas fa-ad" label="Variações E Modelos" caption="">
-          <div class="itemMenu">
-            <q-item clickable tag="a" v-ripple :to="{name: 'variacoesListar'}">
-              <q-item-section avatar>
-                <q-icon fa fa-dollar-sign name="fa fa-list" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Variações</q-item-label>
-              </q-item-section>
-            </q-item>
-          </div>
-          <div class="itemMenu">
-            <q-item clickable tag="a" v-ripple :to="{name: 'modeloListar'}">
-              <q-item-section avatar>
-                <q-icon fa fa-dollar-sign name="fa fa-list" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Modelos</q-item-label>
-              </q-item-section>
-            </q-item>
-          </div>
-        </q-expansion-item>
-        <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fas fa-user-edit" label="Divulgadores" caption="">
-          <div class="itemMenu">
-            <q-item clickable tag="a" v-ripple :to="{name: 'divulgadorListar'}">
-              <q-item-section avatar>
-                <q-icon fa fa-dollar-sign name="fa fa-list" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Listar</q-item-label>
-              </q-item-section>
-            </q-item>
-          </div>
-        </q-expansion-item>
+        <div v-if="isAdmin">
+          <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fa fa-exchange-alt" label="Cadastros Básicos" caption="">
+            <div class="itemMenu">
+              <q-item clickable tag="a" v-ripple :to="{name: 'descricaoListar'}">
+                <q-item-section avatar>
+                  <q-icon fa fa-dollar-sign name="fa fa-list" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Descrição</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable tag="a" v-ripple :to="{name: 'cartaoListar'}">
+                <q-item-section avatar>
+                  <q-icon fa fa-dollar-sign name="fa fa-list" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Cartão</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable tag="a" v-ripple :to="{name: 'produtoListar'}">
+                <q-item-section avatar>
+                  <q-icon fa fa-dollar-sign name="fa fa-list" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Produto</q-item-label>
+                </q-item-section>
+              </q-item>
+              <q-item clickable tag="a" v-ripple :to="{name: 'tituloListar'}">
+                <q-item-section avatar>
+                  <q-icon fa fa-dollar-sign name="fa fa-list" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Título</q-item-label>
+                </q-item-section>
+              </q-item>
+            </div>
+          </q-expansion-item>
+          <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fas fa-ad" label="Variações E Modelos" caption="">
+            <div class="itemMenu">
+              <q-item clickable tag="a" v-ripple :to="{name: 'variacoesListar'}">
+                <q-item-section avatar>
+                  <q-icon fa fa-dollar-sign name="fa fa-list" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Variações</q-item-label>
+                </q-item-section>
+              </q-item>
+            </div>
+            <div class="itemMenu">
+              <q-item clickable tag="a" v-ripple :to="{name: 'modeloListar'}">
+                <q-item-section avatar>
+                  <q-icon fa fa-dollar-sign name="fa fa-list" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Modelos</q-item-label>
+                </q-item-section>
+              </q-item>
+            </div>
+          </q-expansion-item>
+          <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fas fa-user-edit" label="Divulgadores" caption="">
+            <div class="itemMenu">
+              <q-item clickable tag="a" v-ripple :to="{name: 'divulgadorListar'}">
+                <q-item-section avatar>
+                  <q-icon fa fa-dollar-sign name="fa fa-list" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>Listar</q-item-label>
+                </q-item-section>
+              </q-item>
+            </div>
+          </q-expansion-item>
+        </div>
         <EssentialLink
           v-bind="signoutLink"
           @clickLink="logout"
@@ -120,7 +122,7 @@
 
 <script>
 import EssentialLink from 'components/EssentialLink.vue'
-
+import { mapState, mapActions } from 'vuex'
 const menuItens = [
   {
     title: 'Home',
@@ -133,6 +135,9 @@ const menuItens = [
 export default {
   name: 'MainLayout',
   components: { EssentialLink },
+  computed: {
+    ...mapState('usuario', ['isAdmin'])
+  },
   data () {
     return {
       leftDrawerOpen: false,
@@ -145,8 +150,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions('usuario', ['clearUsuario']),
     logout () {
-      localStorage.setItem('logado', null)
+      localStorage.removeItem('usuarioId')
+      this.clearUsuario()
       this.$router.push({ name: 'home' })
     }
   }

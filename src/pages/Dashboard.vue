@@ -24,6 +24,7 @@ import ModeloService from '@/services/modeloService'
 import notificacaoMixin from '@/mixins/notificacaoMixin'
 import ListagemComFiltro from '@/components/ListagemComFiltro'
 import Mensagens from '@/classes/enums/Mensagens'
+import { mapActions } from 'vuex'
 export default {
   name: 'dashboard',
   mixins: [notificacaoMixin],
@@ -74,11 +75,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions('usuario', ['setUsuario']),
     async getUsuario () {
       try {
         const id = localStorage.getItem('usuarioId')
         const response = await UserService.getById(id)
-        if (response.data) this.usuario = response.data
+        if (response.data) {
+          this.usuario = response.data
+          this.setUsuario(response.data)
+        }
       } catch (error) {
         localStorage.setItem('logado', 'nao')
         this.$router.push({ name: 'home' })
