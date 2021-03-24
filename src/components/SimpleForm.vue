@@ -8,10 +8,11 @@
       >
         <q-input
           v-if="input.type !== 'select'"
-          v-model="input.value"
           :type="input.type || 'text'"
           :label="input.label"
+          v-model="input.value"
           :clearable="true && !input.clearable"
+          :mask="input.mask || ''"
         />
 
         <q-select
