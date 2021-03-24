@@ -36,7 +36,7 @@
 <script>
 import userService from '../services/userService'
 import notificacaoMixin from '../mixins/notificacaoMixin'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
   name: 'PageIndex',
   mixins: [notificacaoMixin],
@@ -44,6 +44,9 @@ export default {
     if (localStorage.getItem('usuarioId')) {
       this.navigateToDashBoard()
     }
+  },
+  computed: {
+    ...mapState('usuario', ['isAdmin'])
   },
   data () {
     return {
@@ -59,24 +62,18 @@ export default {
       this.$router.push({ name: 'cadastrar' })
     },
     navigateToDashBoard () {
-      this.$router.push({ name: 'dashboard' })
+      if (this.isAdmin) this.$router.push({ name: 'dashboard' })
+      else this.$router.push({ name: 'dashboard' })
     },
     async login () {
       try {
         const response = await userService.login(this.form)
-        if (response.data && this.isAdmin(response.data)) {
-          localStorage.setItem('usuarioId', response.data.id)
-        }
+        this.setUsuario(response.data)
+        localStorage.setItem('usuarioId', response.data.id)
         this.navigateToDashBoard()
       } catch (error) {
         this.notificacaoErro(error.message)
       }
-    },
-    isAdmin (usuario) {
-      const admin = usuario.isAdmin === true
-      if (!admin) this.notificacaoErro('Usuário não permitido')
-      this.setUsuario(usuario)
-      return admin
     }
   }
 }

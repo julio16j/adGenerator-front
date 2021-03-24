@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-center">
-    <CardForm titulo="Cadastro de Divulgadores" :inputs="inputs"
+    <CardForm :titulo="titulo" :inputs="inputs"
       :cancelButton="cancelButton" :submitButton="submitButton" />
   </div>
 </template>
@@ -16,21 +16,25 @@ export default {
     CardForm
   },
   props: {
-    contexto: { type: String, default: 'cadastro' }
+    contexto: { type: String, default: 'cadastro' },
+    label: { type: String, default: 'Cadastro de Divulgadores' }
   },
   mixins: [NotificacaoMixin],
   created () {
     if (this.contexto === 'editar') {
       this.getDivulgador(this.$route.params.divulgadorId)
+      this.titulo = this.label
     }
   },
   data () {
     return {
+      titulo: 'Cadastro de Divulgadores',
       inputs: [
         { label: 'Nome', value: null, nome: 'nome' },
-        { label: 'Telefone', value: null, nome: 'telefone', mask: '(##) #####-####' },
         { label: 'Email', value: null, nome: 'email', type: 'email' },
-        { label: 'Senha', value: null, nome: 'senha', type: 'password', readonly: this.contexto === 'editar' }
+        { label: 'Senha', value: null, nome: 'senha', type: 'password', hide: this.contexto === 'editar' },
+        { label: 'Confirme a Senha', value: null, nome: 'confirmaSenha', type: 'password', hide: this.contexto === 'editar' },
+        { label: 'Telefone', value: null, nome: 'telefone', mask: '(##) #####-####' }
       ],
       cancelButton: {
         click: () => this.voltar()
@@ -49,14 +53,20 @@ export default {
         .then(response => {
           if (response.status === 200) {
             this.inputs[0].value = response.data.nome
-            this.inputs[1].value = response.data.telefone
-            this.inputs[2].value = response.data.email
+            this.inputs[4].value = response.data.telefone
+            this.inputs[1].value = response.data.email
           }
         })
     },
+    validaCadastro (divulgador) {
+      if (divulgador.senha !== divulgador.confirmaSenha) {
+        this.notificacaoErro('Senhas não coicidem')
+        return false
+      } return true
+    },
     salvarDivulgador (divulgador) {
       if (this.contexto === 'cadastro') {
-        console.log(divulgador)
+        if (!this.validaCadastro(divulgador)) return
         DivulgadorService.cadastrar(divulgador)
           .then(response => {
             if (response.status === 200) {

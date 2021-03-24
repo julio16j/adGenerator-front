@@ -85,7 +85,7 @@ export default {
           this.setUsuario(response.data)
         }
       } catch (error) {
-        localStorage.setItem('logado', 'nao')
+        localStorage.removeItem('usuarioId')
         this.$router.push({ name: 'home' })
         this.notificacaoErro(error.message || 'Erro ao logar')
       }

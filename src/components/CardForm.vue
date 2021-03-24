@@ -14,7 +14,8 @@
                 'col-12': input.type === 'file'
               }"
             >
-              <q-input
+              <div v-if="!input.hide">
+                <q-input
                 v-if="input.type !== 'select' && input.type !== 'file'"
                 :type="input.type || 'text'"
                 :label="input.label"
@@ -59,6 +60,7 @@
                 :clearable="true && !input.clearable"
                 :rules="input.rules || [ val => val && !!val || '']"
               />
+              </div>
             </div>
           </div>
 

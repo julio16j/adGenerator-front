@@ -49,7 +49,7 @@ const routes = [
             path: 'editar/:divulgadorId',
             component: DivulgadorCadastrar,
             name: 'divulgadorEditar',
-            props: { contexto: 'editar' }
+            props: { contexto: 'editar', label: 'Edição de Divulgadores' }
           }
         ]
       },
