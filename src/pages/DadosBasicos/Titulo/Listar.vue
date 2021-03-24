@@ -16,7 +16,10 @@
 import ListagemComFiltro from '@/components/ListagemComFiltro'
 import { TamanhoOptions } from '@/classes/enums/Tamanho'
 import TituloService from '@/services/tituloService'
+import ProdutoService from '@/services/produtoService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
+
+const produtoOptions = []
 
 export default {
   components: {
@@ -26,11 +29,14 @@ export default {
     contexto: { type: String, default: 'listar' }
   },
   mixins: [NotificacaoMixin],
+  created () {
+    this.listarProduto()
+  },
   data () {
     return {
       inputs: [
         { label: 'Descrição', value: null, nome: 'descricao', rules: '' },
-        { label: 'Produto', value: null, nome: 'produto', rules: '' },
+        { label: 'Produto', value: null, nome: 'produto', rules: '', type: 'select', options: produtoOptions },
         { label: 'Tamanho', value: null, nome: 'tamanho', options: TamanhoOptions, type: 'select', rules: '' }
       ],
       tableColumns: [
@@ -79,6 +85,14 @@ export default {
           }
         }).catch(error => {
           this.notificacaoErro(error.message)
+        })
+    },
+    listarProduto () {
+      ProdutoService.listar()
+        .then(response => {
+          response.data.forEach(produto => {
+            produtoOptions.push(produto.nome)
+          })
         })
     },
     excluirTitulo (tituloId) {

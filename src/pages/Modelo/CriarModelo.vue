@@ -89,9 +89,6 @@ export default {
           Object.keys(response.data).forEach(key => {
             this.addElement(key, response.data[key])
           })
-          // const { imagem } = response.data
-          // const { style, absolute, transformacao } = this.getElementoStyle(imagem)
-          // this.addImage({ absolute, style, transformacao })
         })
     },
     getElementoStyle (elemento) {
