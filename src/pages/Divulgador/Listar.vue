@@ -16,6 +16,7 @@
 import ListagemComFiltro from '@/components/ListagemComFiltro'
 import DivulgadorService from '@/services/userService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
+import Mensagens from '@/classes/enums/Mensagens'
 
 export default {
   components: {
@@ -56,7 +57,7 @@ export default {
       excluirBtn: {
         mostraBotao: true,
         excluir: (linha) => {
-          this.excluirTitulo(linha.descricao)
+          this.excluirDivulgador(linha.id)
         }
       },
       cadastrarBtn: {
@@ -79,9 +80,12 @@ export default {
           this.notificacaoErro(error.message)
         })
     },
-    excluirTitulo (divulgadorId) {
+    excluirDivulgador (divulgadorId) {
       DivulgadorService.deleteById(divulgadorId)
-        .then(this.listarTitulo)
+        .then(() => {
+          this.listarDivulgador()
+          this.notificacaoSucesso(Mensagens.OperacaoExecutada)
+        })
     }
   }
 }

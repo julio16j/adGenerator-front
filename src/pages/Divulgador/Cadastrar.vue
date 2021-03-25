@@ -7,7 +7,7 @@
 
 <script>
 import CardForm from '@/components/CardForm'
-import Mensagems from '@/classes/enums/Mensagens'
+import Mensagens from '@/classes/enums/Mensagens'
 import DivulgadorService from '@/services/userService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
 
@@ -70,17 +70,18 @@ export default {
         DivulgadorService.cadastrar(divulgador)
           .then(response => {
             if (response.status === 200) {
-              this.notificacaoSucesso(Mensagems.OperacaoExecutada)
+              this.notificacaoSucesso(Mensagens.OperacaoExecutada)
               this.$router.back()
             }
           }).catch(error => {
             this.notificacaoErro(error.message)
           })
       } else {
+        divulgador.id = this.$route.params.divulgadorId
         DivulgadorService.editar(divulgador)
           .then(response => {
             if (response.status === 200) {
-              this.notificacaoSucesso(Mensagems.OperacaoExecutada)
+              this.notificacaoSucesso(Mensagens.OperacaoExecutada)
               this.$router.back()
             }
           }).catch(error => {
