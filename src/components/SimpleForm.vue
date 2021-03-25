@@ -7,7 +7,7 @@
         :key="input.nome"
       >
         <q-input
-          v-if="input.type !== 'select'"
+          v-if="input.type !== 'select' && input.type !== 'filterSelect'"
           :type="input.type || 'text'"
           :label="input.label"
           v-model="input.value"
@@ -16,7 +16,7 @@
         />
 
         <q-select
-          v-else-if="input.nome !== 'produto'"
+          v-else-if="input.type === 'select'"
           emit-value map-options
           v-model="input.value"
           :label="input.label"
@@ -24,15 +24,7 @@
           :clearable="true && !input.clearable"
         />
 
-        <q-select
-          v-else
-          emit-value map-options use-input
-          v-model="input.value"
-          :label="input.label"
-          :options="options || []"
-          :clearable="true && !input.clearable"
-          @filter="filtrarProduto"
-        />
+        <FilterSelect v-else :input="input" />
       </div>
       <div class="col colorPrimary q-mt-md">
         <q-btn type="submit" :label="submitButton.label || 'Pesquisar'" />
@@ -41,8 +33,11 @@
   </q-form>
 </template>
 <script>
+import FilterSelect from '@/components/FilterSelect'
+
 export default {
   name: 'SimpleForm',
+  components: { FilterSelect },
   props: {
     inputs: {
       type: Array,
@@ -53,12 +48,6 @@ export default {
       type: Object,
       default: () => {},
       required: true
-    }
-  },
-  data () {
-    return {
-      options: [],
-      produtoOptions: this.inputs.find(input => input.nome === 'produto').options
     }
   },
   methods: {
@@ -73,19 +62,6 @@ export default {
       })
       this.$emit('formMontado', form)
       return form
-    },
-    filtrarProduto (val, update) {
-      if (val === '') {
-        update(() => {
-          this.options = this.produtoOptions
-        })
-        return
-      }
-
-      update(() => {
-        const needle = val.toLowerCase()
-        this.options = this.produtoOptions.filter(v => v.toLowerCase().indexOf(needle) > -1)
-      })
     }
   }
 }

@@ -36,7 +36,7 @@ export default {
     return {
       inputs: [
         { label: 'Descrição', value: null, nome: 'descricao', rules: '' },
-        { label: 'Produto', value: null, nome: 'produto', rules: '', type: 'select', options: produtoOptions },
+        { label: 'Produto', value: null, nome: 'produto', rules: '', type: 'filterSelect', options: produtoOptions },
         { label: 'Tamanho', value: null, nome: 'tamanho', options: TamanhoOptions, type: 'select', rules: '' }
       ],
       tableColumns: [

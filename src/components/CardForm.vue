@@ -16,50 +16,27 @@
             >
               <div v-if="!input.hide">
                 <q-input
-                v-if="input.type !== 'select' && input.type !== 'file'"
-                :type="input.type || 'text'"
-                :label="input.label"
-                v-model="input.value"
-                :clearable="true && !input.clearable"
-                :rules="input.rules || [ val => val && val.length > 0 || '']"
-                :readonly="input.readonly || false"
-                :mask="input.mask || ''"
-              />
-
-              <div v-else-if="input.type === 'file'">
-                <q-file
-                  :type="input.type"
+                  v-if="input.type !== 'select' && input.type !== 'file'"
+                  :type="input.type || 'text'"
                   :label="input.label"
                   v-model="input.value"
-                  @rejected="onRejected"
-                  @input="onChange"
-                  accept="image/*"
-                  max-files="1"
-                  outlined bottom-slots
-                  style="width: calc(100% - 16px)"
-                >
-                  <template v-slot:append>
-                    <q-icon name="create_new_folder"></q-icon>
-                  </template>
-                </q-file>
-
-                <q-img
-                  v-if="url || input.url"
-                  :src="url || input.url"
-                  spinner-color="white"
-                  alt="imagemCartao"
-                  style="width: calc(100% - 16px)"
+                  :clearable="true && !input.clearable"
+                  :rules="input.rules || [ val => val && val.length > 0 || '']"
+                  :readonly="input.readonly || false"
+                  :mask="input.mask || ''"
                 />
-              </div>
 
-              <q-select
-                v-else :label="input.label"
-                v-model="input.value"
-                emit-value map-options
-                :options="input.options || []"
-                :clearable="true && !input.clearable"
-                :rules="input.rules || [ val => val && !!val || '']"
-              />
+                <FileInput v-else-if="input.type === 'file'" :input="input" />
+
+                <q-select
+                  v-else
+                  emit-value map-options
+                  v-model="input.value"
+                  :label="input.label"
+                  :options="input.options || []"
+                  :clearable="true && !input.clearable"
+                  :rules="input.rules || [ val => val && !!val || '']"
+                />
               </div>
             </div>
           </div>
@@ -84,8 +61,11 @@
 </template>
 
 <script>
+import FileInput from '@/components/FileInput'
+
 export default {
   name: 'CardForm',
+  components: { FileInput },
   props: {
     titulo: {
       type: String,
@@ -122,11 +102,6 @@ export default {
       required: true
     }
   },
-  data () {
-    return {
-      url: null
-    }
-  },
   methods: {
     onSubmit () {
       const formData = this.montarForm()
@@ -139,15 +114,6 @@ export default {
         form[input.nome] = input.value
       })
       return form
-    },
-    onRejected (rejectedEntries) {
-      this.$q.notify({
-        type: 'negative',
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
-      })
-    },
-    onChange (e) {
-      this.url = URL.createObjectURL(e)
     }
   }
 }
