@@ -9,10 +9,7 @@
           <div class="row q-gutter-x-md justify-center">
             <div v-for="input in inputs"
               :key="input.nome"
-              v-bind:class="{
-                'col-4': input.type !== 'file',
-                'col-12': input.type === 'file'
-              }"
+              :class="input.class || 'col-4'"
             >
               <div v-if="!input.hide">
                 <q-input

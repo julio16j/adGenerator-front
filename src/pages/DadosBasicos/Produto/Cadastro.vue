@@ -33,10 +33,10 @@ export default {
   data () {
     return {
       inputs: [
-        { label: 'Nome', value: null, nome: 'nome', readonly: this.contexto === 'editar' },
-        { label: 'Descricao', value: null, nome: 'descricao' },
-        { label: 'Categoria', value: null, nome: 'categoria', options: CategoriaProdutoOptions, type: 'select' },
-        { label: 'Imagem', value: null, nome: 'imagemProduto', type: 'file' }
+        { label: 'Nome', value: null, nome: 'nome', readonly: this.contexto === 'editar', class: 'col' },
+        { label: 'Descricao', value: null, nome: 'descricao', class: 'col' },
+        { label: 'Categoria', value: null, nome: 'categoria', options: CategoriaProdutoOptions, type: 'select', class: 'col' },
+        { label: 'Imagem', value: null, nome: 'imagemProduto', type: 'file', class: 'col-12' }
       ],
       cancelButton: {
         click: () => this.voltar()

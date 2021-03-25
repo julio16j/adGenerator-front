@@ -28,9 +28,9 @@ export default {
   data () {
     return {
       inputs: [
-        { label: 'Nome', value: null, nome: 'nome', readonly: this.contexto === 'editar' },
-        { label: 'Descrição', value: null, nome: 'descricao' },
-        { label: 'Imagem', value: null, nome: 'imagemCartao', type: 'file' }
+        { label: 'Nome', value: null, nome: 'nome', readonly: this.contexto === 'editar', class: 'col' },
+        { label: 'Descrição', value: null, nome: 'descricao', class: 'col' },
+        { label: 'Imagem', value: null, nome: 'imagemCartao', type: 'file', class: 'col-12' }
       ],
       cancelButton: {
         click: () => this.voltar()
