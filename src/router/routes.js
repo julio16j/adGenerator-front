@@ -1,6 +1,7 @@
 import Home from '@/pages/Index'
 import Cadastra from '@/pages/Cadastra'
 import Dashboard from '@/pages/Dashboard'
+import DashboardDivulgador from '@/pages/DashboardDivulgador'
 import CriarModelo from '@/pages/Modelo/CriarModelo'
 import ModeloListar from '@/pages/Modelo/Listar'
 import DescricaoCadastro from '@/pages/DadosBasicos/Descricao/Cadastro'
@@ -25,6 +26,7 @@ const routes = [
       { path: '', component: Home, name: 'home' },
       { path: 'cadastrar', component: Cadastra, name: 'cadastrar' },
       { path: 'dashboard', component: Dashboard, name: 'dashboard' },
+      { path: 'dashboardDivulgador', component: DashboardDivulgador, name: 'dashboardDivulgador' },
       {
         path: 'modelo',
         component: Router,

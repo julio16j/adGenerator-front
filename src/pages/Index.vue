@@ -63,7 +63,7 @@ export default {
     },
     navigateToDashBoard () {
       if (this.isAdmin) this.$router.push({ name: 'dashboard' })
-      else this.$router.push({ name: 'dashboard' })
+      else this.$router.push({ name: 'dashboardDivulgador' })
     },
     async login () {
       try {

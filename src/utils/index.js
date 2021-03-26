@@ -23,3 +23,7 @@ export function converterEmToPx (stringEm) {
   const intEm = Number(stringEm.replace('em', ''))
   return intEm * fontSizeAtual + 'px'
 }
+export function formatCurrencyBrl (value) {
+  const val = (value / 1).toFixed(2).replace('.', ',')
+  return 'R$ ' + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+}
