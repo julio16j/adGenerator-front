@@ -15,6 +15,7 @@ import ProdutoCadastro from '@/pages/DadosBasicos/Produto/Cadastro'
 import VariacoesListar from '@/pages/Variacoes/Listar'
 import DivulgadorListar from '@/pages/Divulgador/Listar'
 import DivulgadorCadastrar from '@/pages/Divulgador/Cadastrar'
+import AnunciosListar from '@/pages/Anuncios/Listar'
 
 import Router from '../layouts/Router'
 
@@ -122,6 +123,13 @@ const routes = [
         children: [
           { path: 'listar', component: VariacoesListar, name: 'variacoesListar' },
           { path: 'gerar', component: VariacoesListar, name: 'variacoesGerar' }
+        ]
+      },
+      {
+        path: 'anuncios',
+        component: Router,
+        children: [
+          { path: 'listar', component: AnunciosListar, name: 'anunciosListar' }
         ]
       }
     ]
