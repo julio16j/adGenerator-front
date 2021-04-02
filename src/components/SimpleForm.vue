@@ -6,17 +6,8 @@
         v-for="input in inputs"
         :key="input.nome"
       >
-        <q-input
-          v-if="input.type !== 'select' && input.type !== 'filterSelect'"
-          :type="input.type || 'text'"
-          :label="input.label"
-          v-model="input.value"
-          :clearable="true && !input.clearable"
-          :mask="input.mask || ''"
-        />
-
         <q-select
-          v-else-if="input.type === 'select'"
+          v-if="input.type === 'select'"
           emit-value map-options
           v-model="input.value"
           :label="input.label"
@@ -24,7 +15,16 @@
           :clearable="true && !input.clearable"
         />
 
-        <FilterSelect v-else :input="input" />
+        <FilterSelect v-else-if="input.type === 'filterSelect'" :input="input" />
+
+        <q-input
+          v-else
+          :type="input.type || 'text'"
+          :label="input.label"
+          v-model="input.value"
+          :clearable="true && !input.clearable"
+          :mask="input.mask || ''"
+        />
       </div>
       <div class="col colorPrimary q-mt-md">
         <q-btn type="submit" :label="submitButton.label || 'Pesquisar'" />
