@@ -10,7 +10,8 @@ const URL = {
   deleteById: (id) => `${URL.base}/${id}`,
   pesquisar: () => `${URL.base}/filtrar`,
   totalDia: (divulgadorId) => `${URL.base}/dia/${divulgadorId}`,
-  totalMes: (divulgadorId) => `${URL.base}/mes/${divulgadorId}`
+  totalMes: (divulgadorId) => `${URL.base}/mes/${divulgadorId}`,
+  totalContaOlx: (emailContaOlx) => `${URL.base}/contaOlx/${emailContaOlx}`
 }
 
 export default {
@@ -43,5 +44,8 @@ export default {
   },
   totalMes (divulgadorId) {
     return api.get(URL.totalMes(divulgadorId))
+  },
+  totalContaOlx (emailContaOlx) {
+    return api.get(URL.totalContaOlx(emailContaOlx))
   }
 }

@@ -124,11 +124,6 @@ export default {
         submit: this.listarVariacao
       },
       listaVariacao: [],
-      transformacao: {
-        rotate: null,
-        scale: null,
-        translate: null
-      },
       cadastrarBtn: {
         mostraBotao: true,
         cadastrar: () => { this.$router.push({ name: 'variacoesGerar' }) },

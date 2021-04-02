@@ -8,7 +8,8 @@ const URL = {
   editar: () => `${URL.base}/`,
   getById: (id) => `${URL.base}/${id}`,
   deleteById: (id) => `${URL.base}/${id}`,
-  pesquisar: () => `${URL.base}/filtrar`
+  pesquisar: () => `${URL.base}/filtrar`,
+  disponivel: () => `${URL.base}/disponivel`
 }
 
 export default {
@@ -35,5 +36,8 @@ export default {
         return Qs.stringify(params, { arrayFormat: 'brackets' })
       }
     })
+  },
+  obterDisponivel () {
+    return api.get(URL.disponivel())
   }
 }
