@@ -18,6 +18,15 @@
         <FilterSelect v-else-if="input.type === 'filterSelect'" :input="input" />
 
         <q-input
+          v-else-if="input.type === 'price'"
+          v-model="input.value"
+          :label="input.label"
+          mask="#.##"
+          reverse-fill-mask
+          prefix="R$"
+        />
+
+        <q-input
           v-else
           :type="input.type || 'text'"
           :label="input.label"
@@ -26,12 +35,14 @@
           :mask="input.mask || ''"
         />
       </div>
+
       <div class="col colorPrimary q-mt-md">
         <q-btn type="submit" :label="submitButton.label || 'Pesquisar'" />
       </div>
     </div>
   </q-form>
 </template>
+
 <script>
 import FilterSelect from '@/components/FilterSelect'
 

@@ -5,34 +5,43 @@
       <div :class="subTituloStyle">{{ subTitulo }}</div>
 
       <q-form @submit="onSubmit" style="display: flex; justify-content: center" >
-        <div>
+        <div style="width: 80%; max-width: 800px">
           <div class="row q-gutter-x-md justify-center">
             <div v-for="input in inputs"
               :key="input.nome"
               :class="input.class || 'col-4'"
             >
               <div v-if="!input.hide">
+                <FileInput v-if="input.type === 'file'" :input="input" />
+
                 <q-input
-                  v-if="input.type !== 'select' && input.type !== 'file'"
-                  :type="input.type || 'text'"
-                  :label="input.label"
+                  v-else-if="input.type === 'price'"
                   v-model="input.value"
-                  :clearable="true && !input.clearable"
-                  :rules="input.rules || [ val => val && val.length > 0 || '']"
-                  :readonly="input.readonly || false"
-                  :mask="input.mask || ''"
+                  :label="input.label"
+                  mask="#.##"
+                  reverse-fill-mask
+                  prefix="R$"
                 />
 
-                <FileInput v-else-if="input.type === 'file'" :input="input" />
-
                 <q-select
-                  v-else
-                  emit-value map-options
+                  v-else-if="input.type === 'select'"
                   v-model="input.value"
+                  emit-value map-options
                   :label="input.label"
                   :options="input.options || []"
                   :clearable="true && !input.clearable"
                   :rules="input.rules || [ val => val && !!val || '']"
+                />
+
+                <q-input
+                  v-else
+                  v-model="input.value"
+                  :type="input.type || 'text'"
+                  :label="input.label"
+                  :clearable="true && !input.clearable"
+                  :rules="input.rules || [ val => val && val.length > 0 || '']"
+                  :readonly="input.readonly || false"
+                  :mask="input.mask || ''"
                 />
               </div>
             </div>

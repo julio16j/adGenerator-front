@@ -14,7 +14,6 @@
 
 <script>
 import ListagemComFiltro from '@/components/ListagemComFiltro'
-import { CategoriaProdutoOptions } from '@/classes/enums/CategoriaProduto'
 import ProdutoService from '@/services/produtoService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
 
@@ -29,13 +28,13 @@ export default {
   data () {
     return {
       inputs: [
-        { label: 'Nome', value: null, nome: 'nome', rules: '' },
+        { label: 'Título', value: null, nome: 'titulo', rules: '' },
         { label: 'Descrição', value: null, nome: 'descricao', rules: '' },
-        { label: 'Categoria', value: null, nome: 'categoria', options: CategoriaProdutoOptions, type: 'select', rules: '' }
+        { label: 'Preço', value: null, nome: 'preco', rules: '', type: 'price' }
       ],
       tableColumns: [
         { name: 'acoes', label: 'Ações', align: 'center' },
-        { name: 'nome', label: 'Nome', field: 'nome', align: 'center' },
+        { name: 'titulo', label: 'Título', field: 'titulo', align: 'center' },
         { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'center' },
         { name: 'categoria', label: 'Categoria', field: 'categoria', align: 'center' }
       ],
@@ -51,14 +50,14 @@ export default {
         editar: (linha) => {
           this.$router.push({
             name: 'produtoEditar',
-            params: { produtoId: linha.nome }
+            params: { produtoId: linha.id }
           })
         }
       },
       excluirBtn: {
         mostraBotao: true,
         excluir: (linha) => {
-          this.excluirProduto(linha.nome)
+          this.excluirProduto(linha.id)
         }
       },
       cadastrarBtn: {
