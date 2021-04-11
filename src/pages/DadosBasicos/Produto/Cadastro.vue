@@ -64,22 +64,29 @@ export default {
           const [, name] = fileName.split('_')
           const file = new File([blob], name)
 
-          this.inputs[7].value = file
-          this.inputs[7].url = url
+          this.inputs[8].value = file
+          this.inputs[8].url = url
         })
     },
     getProduto (produtoValorId) {
       ProdutoService.getById(produtoValorId)
         .then(response => {
           if (response.status === 200) {
-            this.inputs[0].value = response.data.titulo
-            this.inputs[1].value = response.data.categoria
-            this.inputs[2].value = response.data.subCategoria
-            this.inputs[3].value = response.data.tipo
-            this.inputs[4].value = response.data.cep
-            this.inputs[5].value = response.data.condicao
-            this.inputs[6].value = response.data.descricao
-            this.inputs[8].value = response.data.preco.toFixed(2)
+            this.inputs.unshift({
+              label: 'Código',
+              value: response.data.codigoProduto.codigo,
+              nome: 'codigo',
+              class: 'col-3',
+              readonly: true
+            })
+            this.inputs[1].value = response.data.titulo
+            this.inputs[2].value = response.data.categoria
+            this.inputs[3].value = response.data.subCategoria
+            this.inputs[4].value = response.data.tipo
+            this.inputs[5].value = response.data.cep
+            this.inputs[6].value = response.data.condicao
+            this.inputs[7].value = response.data.descricao
+            this.inputs[9].value = response.data.preco.toFixed(2)
             this.getImagem(response.data.caminhoImagem)
           }
         })

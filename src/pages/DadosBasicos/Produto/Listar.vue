@@ -36,6 +36,7 @@ export default {
         { name: 'acoes', label: 'Ações', align: 'center' },
         { name: 'titulo', label: 'Título', field: 'titulo', align: 'center' },
         { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'center' },
+        { name: 'codigo', label: 'Código', field: (linha) => { return linha.codigoProduto.codigo }, align: 'center' },
         { name: 'categoria', label: 'Categoria', field: 'categoria', align: 'center' }
       ],
       cancelButton: {

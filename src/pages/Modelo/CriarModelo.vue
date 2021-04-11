@@ -2,47 +2,75 @@
   <q-page class="flex justify-center" @click.self="desligaFoco">
     <div @click.self="desligaFoco" >
       <div @click.self="desligaFoco">
-        <div class="row justify-center q-my-md text-h4 colorPrimary" @click.self="desligaFoco">
+        <div
+          class="row justify-center q-my-md text-h4 colorPrimary"
+          @click.self="desligaFoco"
+        >
           <div class="col text-h5 text-center q-pl-md flex items-center">
             Cadastro de Modelos
           </div>
+
           <div class="q-ml-md q-gutter-x-md q-pr-md">
-            <q-btn label="Voltar" @click="voltar" color="dark" />
-            <q-btn label="Salvar" @click="abrirDialog" icon="check" color="green" />
+            <q-btn
+              label="Voltar"
+              @click="voltar"
+              color="dark"
+            />
+
+            <q-btn
+              label="Salvar"
+              @click="abrirDialog"
+              icon="check"
+              color="green"
+            />
           </div>
         </div>
+
         <div @click.self="desligaFoco" class="row justify-center">
-          <div style="border: 1px solid black; height: 25em; width: 25em; position: relative"
-            @click.self="desligaFoco" >
-            <moveable-element @focou="()=>{element.foco = true}"
+          <div
+            style="border: 1px solid black; height: 25em; width: 25em; position: relative"
+            @click.self="desligaFoco"
+          >
+            <span class="q-ma-md">Código do Produto</span>
+            <moveable-element
+              @focou="()=>{element.foco = true}"
               @excluirElemento="excluirElemento"
               @transform="transformarElemento"
-              v-for="element in elements" :key="element.id"
-              :element="element" :foco="element.foco"
+              v-for="element in elements"
+              :key="element.id"
+              :element="element"
+              :foco="element.foco"
               :style="element.absolute"
             />
           </div>
         </div>
-        <div class="row justify-center q-mt-md q-px-md" @click.self="desligaFoco" >
-            <q-btn-group push  >
-              <q-btn push color="primary" label="Imagem" icon="image" @click="addImage" />
-              <q-btn push color="primary" label="Título" icon="title" @click="addTitle" />
-              <q-btn push color="primary" label="Descrição" icon="description" @click="addDescricao" />
-              <q-btn push color="primary" label="Cartão" icon="far fa-credit-card" @click="addCartao" />
-            </q-btn-group>
-          </div>
+
+        <div
+          class="row justify-center q-mt-md q-px-md"
+          @click.self="desligaFoco"
+        >
+          <q-btn-group push >
+            <q-btn push color="primary" label="Imagem" icon="image" @click="addImage" />
+            <q-btn push color="primary" label="Título" icon="title" @click="addTitle" />
+            <q-btn push color="primary" label="Descrição" icon="description" @click="addDescricao" />
+            <q-btn push color="primary" label="Cartão" icon="far fa-credit-card" @click="addCartao" />
+          </q-btn-group>
+        </div>
       </div>
     </div>
+
     <q-dialog v-model="abreNomeDialog" >
-      <q-card >
+      <q-card>
         <q-card-section class="colorPrimary text-h6">
           Insira um Nome para o Modelo
         </q-card-section>
+
         <q-card-section>
           <div>
             <q-input label="Nome" v-model="modelo.nome" />
           </div>
         </q-card-section>
+
         <q-card-actions align="right" class="bg-white text-teal">
           <q-btn flat label="Cancelar" v-close-popup />
           <q-btn flat label="Salvar" @click="salvar" />
@@ -51,6 +79,7 @@
     </q-dialog>
   </q-page>
 </template>
+
 <script>
 import MoveableElement from 'components/MoveableElement'
 import TipoElemento from '@/classes/enums/TipoElemento'
@@ -185,7 +214,7 @@ export default {
         this.elements.push({
           id: this.elementsSequence,
           tipo: TipoElemento.Imagem,
-          absolute: absolute || 'position: absolute; top: 0;',
+          absolute: absolute || 'position: absolute; top: 2em;',
           style: style || 'color: white; width: 12.5em; height: 12.5em;',
           foco: true,
           transform: transformacao
