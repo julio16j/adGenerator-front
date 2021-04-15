@@ -4,49 +4,98 @@
       <q-breadcrumbs-el label="Variações" />
       <q-breadcrumbs-el label="Listar" />
     </q-breadcrumbs>
+
     <div class="q-mx-md q-gutter-md" >
       <q-card class="q-ml-md" >
         <q-card-section class="row justify-between">
           <div class="text-h6 colorPrimary">
             Variações
           </div>
+
           <div v-if="cadastrarBtn.mostraBotao" class="col-auto">
-            <q-btn color="primary" no-caps @click="cadastrarBtn.cadastrar"
-              :label=" cadastrarBtn.label || 'Cadastrar'" />
+            <q-btn
+              no-caps
+              color="primary"
+              @click="cadastrarBtn.cadastrar"
+              :label=" cadastrarBtn.label || 'Cadastrar'"
+            />
           </div>
         </q-card-section>
+
         <q-card-section class="q-gutter-md">
-          <simple-form @formMontado="form => filtroVariacao = form" :inputs="inputs" :submitButton="submitButton" />
+          <simple-form
+            @formMontado="form => filtroVariacao = form"
+            :inputs="inputs"
+            :submitButton="submitButton"
+          />
         </q-card-section>
       </q-card>
+
       <q-card>
-        <q-table v-if="listaVariacao.length > 0" :data="listaVariacao" :columns="tableColumns"
-          class="no-shadow q-pa-none" row-key="chave"
-          hide-pagination grid >
+        <q-table
+          v-if="listaVariacao.length > 0"
+          :data="listaVariacao"
+          :columns="tableColumns"
+          class="no-shadow q-pa-none"
+          row-key="chave"
+          hide-pagination grid
+        >
           <template v-slot:item="item">
-            <q-card :style="'width: 25em; height: 25em;background-color:' + item.row.temaCor.corFundo "
-              class="q-ma-md" >
-              <expansion-menu :itens="itemsMenu" @menuClick="(evento) => executarClique(evento, item.row)" />
-              <div class="flex flex-center" :style="getElementoStyle(item.row.modelo.imagem)" >
+            <q-card
+              :style="'width: 25em; height: 25em; background-color: ' + item.row.temaCor.corFundo"
+              class="q-ma-md"
+            >
+              <div class="flex">
+                <span
+                  class="q-ma-md"
+                  :style="'color:' + item.row.temaCor.corFonte"
+                >
+                  código: {{ item.row.produto.codigoProduto.codigo }}
+                </span>
+
+                <expansion-menu
+                  :itens="itemsMenu"
+                  @menuClick="(evento) => executarClique(evento, item.row)"
+                />
+              </div>
+
+              <div
+                class="flex flex-center"
+                :style="getElementoStyle(item.row.modelo.imagem)"
+              >
                 <q-img
                   :src="urlImagem(item.row.produto.caminhoImagem)"
                   spinner-color="white"
-                  :style="'height: 100%;' + getInvertidaStyle(item.row.invertida)"
+                  :style="'height: 100%; ' + getInvertidaStyle(item.row.invertida)"
                 />
               </div>
-              <div class="flex flex-center" :style="getElementoStyle(item.row.modelo.titulo)" >
+
+              <div
+                class="flex flex-center"
+                :style="getElementoStyle(item.row.modelo.titulo)"
+              >
                 <span :style="'color:' + item.row.temaCor.corFonte" >
                   {{ item.row.titulo.descricao }}
                 </span>
               </div>
-              <div class="flex flex-center" v-for="(descricao, index) in item.row.modelo.descricoes"
-                :key="descricao.transformacao" :style="getElementoStyle(descricao)" >
+
+              <div
+                class="flex flex-center"
+                v-for="(descricao, index) in item.row.modelo.descricoes"
+                :key="descricao.transformacao"
+                :style="getElementoStyle(descricao)"
+              >
                 <span :style="'color:' + item.row.temaCor.corFonte" >
                   {{ item.row.descricoes[index].descricao }}
                 </span>
               </div>
-              <div class="flex flex-center" v-for="(cartao, index) in item.row.modelo.cartoes"
-                :key="cartao.transformacao" :style="getElementoStyle(cartao)" >
+
+              <div
+                class="flex flex-center"
+                v-for="(cartao, index) in item.row.modelo.cartoes"
+                :key="cartao.transformacao"
+                :style="getElementoStyle(cartao)"
+              >
                 <q-img
                   :src="urlImagem(item.row.cartoes[index].caminhoImagem)"
                   spinner-color="white"
@@ -56,6 +105,7 @@
             </q-card>
           </template>
         </q-table>
+
         <div class="row justify-center q-mt-md">
           <q-pagination
             v-model="pagination.page"
@@ -117,7 +167,7 @@ export default {
       tableColumns: [
         { name: 'acoes', label: 'Ações', align: 'center' },
         { name: 'modelo', label: 'Modelo', field: row => row.modelo.nome, align: 'center' },
-        { name: 'produto', label: 'Produto', field: row => row.produto.nome, align: 'center' },
+        { name: 'produto', label: 'Produto', field: row => row.produto.titulo, align: 'center' },
         { name: 'titulo', label: 'Titulo', field: row => row.titulo.descricao, align: 'center' }
       ],
       submitButton: {

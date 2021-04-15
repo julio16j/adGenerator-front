@@ -42,7 +42,7 @@ export default {
       tableColumns: [
         { name: 'acoes', label: 'Ações', align: 'center' },
         { name: 'descricao', label: 'Descrição', field: 'descricao', align: 'center' },
-        { name: 'produto', label: 'Produto', field: (linha) => { return linha.produto.nome }, align: 'center' },
+        { name: 'produto', label: 'Produto', field: (linha) => { return linha.produto.titulo }, align: 'center' },
         { name: 'tamanho', label: 'Tamanho', field: 'tamanho', align: 'center' }
       ],
       cancelButton: {
