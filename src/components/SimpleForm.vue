@@ -33,6 +33,7 @@
           v-model="input.value"
           :clearable="true && !input.clearable"
           :mask="input.mask || ''"
+          :stack-label="input.type === 'date'"
         />
       </div>
 
