@@ -112,40 +112,83 @@
             <div class="col-12 q-gutter-xl">
               <div class="row q-gutter-x-md justify-center">
                 <div class="col-3">
-                  <input-check v-model="item.row.produto.nome" name="titulo" label="Título"
-                    @check="name => validaCheck(name)" />
+                  <input-check
+                    v-model="item.row.produto.titulo"
+                    name="titulo"
+                    label="Título"
+                    @check="name => validaCheck(name)"
+                    :class="anuncioValidador.titulo ? 'bg-green-6' : ''"
+                  />
                 </div>
                 <div class="col-3">
-                  <input-check v-model="item.row.produto.descricao" name="descricao" label="Descrição"
-                    @check="name => validaCheck(name)" />
+                  <input-check
+                    v-model="item.row.produto.descricao"
+                    name="descricao"
+                    label="Descrição"
+                    @check="name => validaCheck(name)"
+                    :class="anuncioValidador.descricao ? 'bg-green-6' : ''"
+                  />
                 </div>
                 <div class="col-3">
-                  <input-check v-model="item.row.produto.descricao" name="preco" label="Preço"
-                    @check="name => validaCheck(name)" />
+                  <input-check
+                    v-model="item.row.produto.preco"
+                    name="preco"
+                    label="Preço"
+                    @check="name => validaCheck(name)"
+                    :class="anuncioValidador.preco ? 'bg-green-6' : ''"
+                  />
                 </div>
               </div>
               <div class="row q-gutter-x-md justify-center items-center">
                 <div class="col-3">
-                  <input-check v-model="item.row.produto.descricao" name="categoria" label="Categoria"
-                    checkType="checkbox" @check="name => validaCheck(name)" />
+                  <input-check
+                    v-model="item.row.produto.categoria"
+                    name="categoria"
+                    label="Categoria"
+                    checkType="checkbox"
+                    @check="name => validaCheck(name)"
+                    :class="anuncioValidador.categoria ? 'bg-green-6' : ''"
+                  />
                 </div>
                 <div class="col-3">
-                  <input-check v-model="item.row.produto.descricao" name="subCategoria" label="SubCategoria"
-                    checkType="checkbox" @check="name => validaCheck(name)" />
+                  <input-check
+                    v-model="item.row.produto.subCategoria"
+                    name="subCategoria"
+                    label="SubCategoria"
+                    checkType="checkbox"
+                    @check="name => validaCheck(name)"
+                    :class="anuncioValidador.subCategoria ? 'bg-green-6' : ''"
+                  />
                 </div>
                 <div class="col-3">
-                  <input-check v-model="item.row.produto.descricao" name="tipo" label="Tipo"
-                    checkType="checkbox" @check="name => validaCheck(name)" />
+                  <input-check
+                    v-model="item.row.produto.tipo" name="tipo"
+                    label="Tipo"
+                    checkType="checkbox"
+                    @check="name => validaCheck(name)"
+                    :class="anuncioValidador.tipo ? 'bg-green-6' : ''"
+                  />
                 </div>
               </div>
               <div class="row q-gutter-x-md justify-center">
                 <div class="col-3">
-                  <input-check v-model="item.row.produto.descricao" name="condicaoProduto" checkType="checkbox"
-                    label="Novo / Usado" @check="name => validaCheck(name)" />
+                  <input-check
+                    v-model="item.row.produto.status"
+                    name="condicaoProduto"
+                    checkType="checkbox"
+                    label="Novo / Usado"
+                    @check="name => validaCheck(name)"
+                    :class="anuncioValidador.condicaoProduto ? 'bg-green-6' : ''"
+                  />
                 </div>
                 <div class="col-3">
-                  <input-check v-model="item.row.produto.descricao" name="cep" label="Cep Cidade"
-                    @check="name => validaCheck(name)" />
+                  <input-check
+                    v-model="item.row.produto.cep"
+                    name="cep"
+                    label="Cep Cidade"
+                    @check="name => validaCheck(name)"
+                    :class="anuncioValidador.cep ? 'bg-green-6' : ''"
+                  />
                 </div>
                 <div class="col-3 flex justify-end">
                   <div>
@@ -168,6 +211,7 @@ import Mensagens from '@/classes/enums/Mensagens'
 import UserService from '@/services/userService'
 import VariacaoService from '@/services/variacaoService'
 import AnuncioService from '@/services/anuncioService'
+import ProdutoService from '@/services/produtoService'
 import StorageService from '@/services/storageService.js'
 import ContaOlxService from '@/services/contaOlxService.js'
 import notificacaoMixin from '@/mixins/notificacaoMixin'
@@ -180,7 +224,7 @@ export default {
   mounted () {
     this.getUsuario()
     this.obterContaOlx()
-    this.listarVariacao({})
+    this.listarProdutos()
   },
   computed: {
     totalReais () {
@@ -215,6 +259,7 @@ export default {
         status: null
       },
       listaVariacao: [],
+      listaProdutos: [],
       tableColumns: [
         { name: 'acoes', label: 'Ações', align: 'center' },
         { name: 'modelo', label: 'Modelo', field: row => row.modelo.nome, align: 'center' },
@@ -228,7 +273,8 @@ export default {
       },
       totalAnuncioDia: 0,
       totalAnuncioMes: 0,
-      totalAnuncioConta: 0
+      totalAnuncioConta: 0,
+      index: 0
     }
   },
   methods: {
@@ -311,13 +357,33 @@ export default {
       this.pagination = props.pagination
       this.listarVariacao(this.filtroVariacao)
     },
-    listarVariacao (variacaoFiltro) {
-      VariacaoService.pesquisar({ ...variacaoFiltro, page: this.pagination.page - 1, size: this.pagination.rowsPerPage })
+    listarProdutos () {
+      ProdutoService.listar()
         .then(response => {
+          this.listaProdutos = response.data
+          if (this.listaProdutos.length > 0) {
+            const produto = this.listaProdutos.shift()
+            if (produto) {
+              this.listarVariacao({ produtoId: produto.titulo })
+            }
+          }
+        })
+    },
+    listarVariacao (variacaoFiltro) {
+      VariacaoService.listarVariacoesSemAnuncio({ ...variacaoFiltro, page: this.pagination.page - 1, size: this.pagination.rowsPerPage })
+        .then(response => {
+          console.log(variacaoFiltro)
           if (response.status === 200) {
-            this.listaVariacao = response.data.content
-            this.pagination.page = response.data.number + 1
-            this.pagination.pagesNumber = response.data.totalPages
+            if (response.data.content.length > 0) {
+              this.listaVariacao = response.data.content
+              this.pagination.page = response.data.number + 1
+              this.pagination.pagesNumber = response.data.totalPages
+            } else {
+              const produto = this.listaProdutos.shift()
+              if (produto) {
+                this.listarVariacao({ produtoId: produto.titulo })
+              }
+            }
           }
         }).catch(error => {
           this.notificacaoErro(error.message)
@@ -344,6 +410,23 @@ export default {
       AnuncioService.cadastrar(this.anuncio)
         .then(() => {
           this.notificacaoSucesso(Mensagens.OperacaoExecutada)
+          this.anuncioValidador = {
+            imagem: false,
+            titulo: false,
+            descricao: false,
+            categoria: false,
+            subCategoria: false,
+            tipo: false,
+            preco: false,
+            cep: false,
+            condicaoProduto: false
+          }
+          const produto = this.listaProdutos.shift()
+          if (!produto) {
+            this.listarProdutos()
+          } else {
+            this.listarVariacao({ produtoId: produto.titulo })
+          }
         })
     }
   }

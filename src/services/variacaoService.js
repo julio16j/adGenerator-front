@@ -5,7 +5,8 @@ const URL = {
   base: 'variacaoModelo',
   listar: () => `${URL.base}/`,
   deleteById: (id) => `${URL.base}/${id}`,
-  pesquisar: () => `${URL.base}/filtrar`
+  pesquisar: () => `${URL.base}/filtrar`,
+  listarVariacoesSemAnuncio: () => `${URL.base}/semAnuncio`
 }
 export default {
   listar () {
@@ -16,6 +17,15 @@ export default {
   },
   pesquisar (filtro) {
     return api.get(URL.pesquisar(), {
+      silentNotify: true,
+      params: filtro,
+      paramsSerializer: function (params) {
+        return Qs.stringify(params, { arrayFormat: 'brackets' })
+      }
+    })
+  },
+  listarVariacoesSemAnuncio (filtro) {
+    return api.get(URL.listarVariacoesSemAnuncio(), {
       silentNotify: true,
       params: filtro,
       paramsSerializer: function (params) {

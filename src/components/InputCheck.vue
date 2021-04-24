@@ -1,14 +1,27 @@
 <template>
   <div class="row" >
-    <q-input :class="'col ' + inputClass" :label="label" :readonly="readonly" outlined v-model="value" />
-    <q-btn v-if="checkType === 'copy'" flat @click="() => copiar(value)" >
+    <q-input
+      :class="'col ' + inputClass"
+      :label="label"
+      :readonly="readonly"
+      outlined
+      v-model="value"
+    />
+
+    <q-btn
+      v-if="checkType === 'copy'"
+      flat
+      @click="() => copiar(value)"
+    >
       <q-icon name="far fa-clone" size="1rem" />
     </q-btn>
+
     <q-btn v-else flat @click="sucess" >
       <q-icon name="fas fa-check" size="1rem" />
     </q-btn>
   </div>
 </template>
+
 <script>
 import { copyToClipboard } from 'quasar'
 export default {
@@ -43,7 +56,7 @@ export default {
         })
     },
     sucess () {
-      this.inputClass = 'bg-green-6'
+      // this.inputClass = 'bg-green-6'
       this.$emit('check', this.name)
     }
   }

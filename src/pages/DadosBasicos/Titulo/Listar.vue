@@ -91,7 +91,7 @@ export default {
       ProdutoService.listar()
         .then(response => {
           response.data.forEach(produto => {
-            produtoOptions.push(produto.nome)
+            produtoOptions.push(produto.titulo)
           })
         })
     },
