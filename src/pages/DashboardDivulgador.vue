@@ -173,7 +173,7 @@
               <div class="row q-gutter-x-md justify-center">
                 <div class="col-3">
                   <input-check
-                    v-model="item.row.produto.status"
+                    v-model="item.row.produto.condicao"
                     name="condicaoProduto"
                     checkType="checkbox"
                     label="Novo / Usado"
