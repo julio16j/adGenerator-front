@@ -10,7 +10,10 @@ import CardForm from '@/components/CardForm'
 import { TamanhoOptions } from '@/classes/enums/Tamanho'
 import Mensagems from '@/classes/enums/Mensagens'
 import TituloService from '@/services/tituloService'
+import ProdutoService from '@/services/produtoService'
 import NotificacaoMixin from '@/mixins/notificacaoMixin'
+
+const produtoOptions = []
 
 export default {
   components: {
@@ -21,6 +24,7 @@ export default {
   },
   mixins: [NotificacaoMixin],
   created () {
+    this.listarProduto()
     if (this.contexto === 'editar') {
       this.getTitulo(this.$route.params.tituloId)
     }
@@ -29,7 +33,7 @@ export default {
     return {
       inputs: [
         { label: 'Descrição', value: null, nome: 'descricao', readonly: this.contexto === 'editar' },
-        { label: 'Produto', value: null, nome: 'produtoId' },
+        { label: 'Produto', value: null, nome: 'produtoId', type: 'filterSelect', options: produtoOptions },
         { label: 'Tamanho', value: null, nome: 'tamanho', options: TamanhoOptions, type: 'select' }
       ],
       cancelButton: {
@@ -50,7 +54,7 @@ export default {
           if (response.status === 200) {
             this.inputs[0].value = response.data.descricao
             this.inputs[2].value = response.data.tamanho
-            this.inputs[1].value = response.data.produto.nome
+            this.inputs[1].value = response.data.produto.titulo
           }
         })
     },
@@ -76,6 +80,14 @@ export default {
             this.notificacaoErro(error.message)
           })
       }
+    },
+    listarProduto () {
+      ProdutoService.listar()
+        .then(response => {
+          response.data.forEach(produto => {
+            produtoOptions.push(produto.titulo)
+          })
+        })
     },
     imprimeXablau (xablau) {
       console.log(xablau)

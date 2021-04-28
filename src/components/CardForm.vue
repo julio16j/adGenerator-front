@@ -33,6 +33,8 @@
                   :rules="input.rules || [ val => val && !!val || '']"
                 />
 
+                <FilterSelect v-else-if="input.type === 'filterSelect'" :input="input" />
+
                 <q-input
                   v-else
                   v-model="input.value"
@@ -68,10 +70,11 @@
 
 <script>
 import FileInput from '@/components/FileInput'
+import FilterSelect from '@/components/FilterSelect'
 
 export default {
   name: 'CardForm',
-  components: { FileInput },
+  components: { FileInput, FilterSelect },
   props: {
     titulo: {
       type: String,
