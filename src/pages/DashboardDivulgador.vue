@@ -372,7 +372,6 @@ export default {
     listarVariacao (variacaoFiltro) {
       VariacaoService.listarVariacoesSemAnuncio({ ...variacaoFiltro, page: this.pagination.page - 1, size: this.pagination.rowsPerPage })
         .then(response => {
-          console.log(variacaoFiltro)
           if (response.status === 200) {
             if (response.data.content.length > 0) {
               this.listaVariacao = response.data.content

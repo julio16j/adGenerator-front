@@ -4,11 +4,54 @@
       <q-breadcrumbs-el label="Modelos" />
       <q-breadcrumbs-el label="Listar" />
     </q-breadcrumbs>
-    <listagem-com-filtro class="q-pa-md" titulo="Modelos" :inputs="inputs"
-      :cancelButton="cancelButton" :submitButton="submitButton"
-      :tableColumns="tableColumns" :dataList="listaModelo"
-      :excluirBtn="excluirBtn" :detalharBtn="detalharBtn" :cadastrarBtn="cadastrarBtn"
+    <listagem-com-filtro
+      class="q-pa-md"
+      titulo="Modelos"
+      :inputs="inputs"
+      :cancelButton="cancelButton"
+      :submitButton="submitButton"
+      :tableColumns="tableColumns"
+      :dataList="listaModelo"
+      :excluirBtn="excluirBtn"
+      :editarBtn="editarBtn"
+      :detalharBtn="detalharBtn"
+      :cadastrarBtn="cadastrarBtn"
     />
+    <q-dialog v-model="modal">
+      <q-card
+        :style="'width: 25em; height: 25em; margin: 0 auto; background: white;'"
+        class="q-ma-md"
+      >
+        <div
+          class="flex flex-center"
+          :style="'background-color: #666; ' + getElementoStyle(modelo.imagem)"
+        >
+          <span>Imagem do produto</span>
+        </div>
+        <div
+          class="flex flex-center"
+          :style="'background-color: #666; ' + getElementoStyle(modelo.titulo)"
+        >
+          <span>Título</span>
+        </div>
+        <div
+          class="flex flex-center"
+          v-for="(descricao) in modelo.descricoes"
+          :key="descricao.transformacao"
+          :style="'background-color: #666; ' + getElementoStyle(descricao)"
+        >
+          <span>descrição</span>
+        </div>
+        <div
+          class="flex flex-center"
+          v-for="(cartao) in modelo.cartoes"
+          :key="cartao.transformacao"
+          :style="'background-color: #666; ' + getElementoStyle(cartao)"
+        >
+          <span>Cartão</span>
+        </div>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -17,12 +60,16 @@ import ModeloService from '@/services/modeloService'
 import notificacaoMixin from '@/mixins/notificacaoMixin'
 import ListagemComFiltro from '@/components/ListagemComFiltro'
 import Mensagens from '@/classes/enums/Mensagens'
+import { getFontSize } from '@/utils'
+
 export default {
   name: 'dashboard',
   mixins: [notificacaoMixin],
   components: { ListagemComFiltro },
   data () {
     return {
+      modal: false,
+      modelo: {},
       inputs: [
         { label: 'Nome', value: null, nome: 'nome' }
       ],
@@ -42,7 +89,17 @@ export default {
       detalharBtn: {
         mostraBotao: true,
         detalhar: (linha) => {
-          this.detalharModelo(linha.nome)
+          this.modelo = linha
+          this.modal = true
+        }
+      },
+      editarBtn: {
+        mostraBotao: true,
+        editar: (linha) => {
+          this.$router.push({
+            name: 'editarModelo',
+            params: { modeloId: linha.nome }
+          })
         }
       },
       excluirBtn: {
@@ -84,6 +141,27 @@ export default {
     },
     detalharModelo (modeloId) {
       this.$router.push({ name: 'variacoesListar', params: { modeloId } })
+    },
+    getElementoStyle (elemento) {
+      if (!elemento) {
+        elemento = {
+          transformacao: '',
+          estiloInicial: ''
+        }
+      }
+      const transformacao = elemento.transformacao
+      let elementoStyle = elemento.estiloInicial
+      elementoStyle += 'transform:' + this.tratarTransform(transformacao)
+      return elementoStyle
+    },
+    tratarTransform (transformacao) {
+      if (!transformacao) return
+      const fontSize = getFontSize()
+      const [matrix, direita] = transformacao.split(') ')
+      const matrixSplit = matrix.split(',')
+      matrixSplit[4] = matrixSplit[4] * fontSize
+      matrixSplit[5] = matrixSplit[5] * fontSize
+      return matrixSplit.join(',') + ') ' + direita
     }
   }
 }

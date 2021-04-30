@@ -106,19 +106,12 @@
               </q-item>
             </div>
           </q-expansion-item>
-          <q-expansion-item class="colorPrimary" group="leftMenu" expand-separator icon="fas fa-user-edit" label="Anúncios" caption="">
-            <div class="itemMenu">
-              <q-item clickable tag="a" v-ripple :to="{name: 'anunciosListar'}">
-                <q-item-section avatar>
-                  <q-icon fa fa-dollar-sign name="fa fa-list" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>Listar</q-item-label>
-                </q-item-section>
-              </q-item>
-            </div>
-          </q-expansion-item>
         </div>
+        <EssentialLink
+          title="Anúncios"
+          link="anunciosListar"
+          icon="fa fa-list"
+        />
         <EssentialLink
           v-bind="signoutLink"
           @clickLink="logout"
