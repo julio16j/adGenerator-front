@@ -200,6 +200,9 @@
           </div>
         </template>
       </q-table>
+      <div v-else style="text-align: center; padding: 10px; font-size: 24px;">
+        Não há mais produtos para postar
+      </div>
     </q-card>
   </div>
 </template>

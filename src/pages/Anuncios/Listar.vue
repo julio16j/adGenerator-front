@@ -8,7 +8,6 @@
     <ListagemComFiltro titulo="Anúncios" :inputs="inputs"
       :cancelButton="cancelButton" :submitButton="submitButton"
       :tableColumns="tableColumns" :dataList="listaAnuncio"
-      :excluirBtn="excluirBtn" :cadastrarBtn="cadastrarBtn"
       :detalharBtn="detalharBtn"
     />
 
@@ -157,7 +156,8 @@ export default {
             return this.tratarData(linha.dataPostado)
           },
           align: 'center'
-        }
+        },
+        { name: 'status', label: 'Status', field: 'status', align: 'center' }
       ],
       listaAnuncio: [],
       cancelButton: {
@@ -165,10 +165,6 @@ export default {
       },
       submitButton: {
         submit: this.listarAnuncio
-      },
-      excluirBtn: {
-        mostraBotao: true,
-        excluir: () => {}
       },
       detalharBtn: {
         mostraBotao: true,
@@ -181,10 +177,6 @@ export default {
           this.link = linha.link
           this.modal = true
         }
-      },
-      cadastrarBtn: {
-        mostraBotao: true,
-        cadastrar: () => {}
       }
     }
   },
@@ -198,6 +190,9 @@ export default {
         .then(response => {
           if (response.status === 200) {
             this.listaAnuncio = response.data
+            this.listaAnuncio.sort((a, b) => {
+              return new Date(b.dataPostado) - new Date(a.dataPostado)
+            })
           }
         }).catch(error => {
           this.notificacaoErro(error.message)
