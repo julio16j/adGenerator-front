@@ -78,6 +78,12 @@
             <div class="col-12 flex justify-center">
               <q-card ref="variacao" :style="'width: 25em; height: 25em;background-color:' + item.row.temaCor.corFundo "
                 class="q-ma-md" >
+                <span
+                  class="q-ma-md"
+                  :style="'color:' + item.row.temaCor.corFonte"
+                >
+                  código: {{ item.row.produto.codigoProduto.codigo }}
+                </span>
                 <div ref="downloadButton" class="absolute-right">
                   <q-btn color="primary" flat icon="fas fa-download" @click="() =>baixarVariacao(item.row)" />
                 </div>
@@ -367,6 +373,7 @@ export default {
           if (this.listaProdutos.length > 0) {
             const produto = this.listaProdutos.shift()
             if (produto) {
+              console.log(produto)
               this.listarVariacao({ produtoId: produto.titulo })
             }
           }

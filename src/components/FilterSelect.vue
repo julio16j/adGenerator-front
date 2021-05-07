@@ -27,8 +27,7 @@ export default {
     filtrarProduto (val, update) {
       if (val === '') {
         update(() => {
-          this.options = []
-          this.options = this.selectOptions
+          this.options = Array.from(new Set(this.selectOptions))
         })
         return
       }

@@ -24,6 +24,12 @@
             :style="'width: 25em; height: 25em; margin: 0 auto; background: ' + variacaoModelo.temaCor.corFundo"
             class="q-ma-md"
           >
+            <span
+              class="q-ma-md"
+              :style="'color:' + variacaoModelo.temaCor.corFonte"
+            >
+              código: {{ variacaoModelo.produto.codigoProduto.codigo }}
+            </span>
             <div
               class="flex flex-center"
               :style="getElementoStyle(variacaoModelo.modelo.imagem)"
@@ -118,7 +124,9 @@ export default {
       variacaoModelo: {
         temaCor: {},
         modelo: {},
-        produto: {},
+        produto: {
+          codigoProduto: {}
+        },
         titulo: {}
       },
       contaOlx: {},
